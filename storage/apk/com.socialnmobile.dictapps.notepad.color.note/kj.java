@@ -106,10 +106,9 @@ public final class kj
                             length = array.length;
                             n = 0;
                             break Label_0088;
+                            return compileStatement.executeInsert();
                             DatabaseUtils.bindObjectToProgram((SQLiteProgram)compileStatement, n + 1, array[n]);
                             ++n;
-                            break Label_0088;
-                            return compileStatement.executeInsert();
                         }
                         finally {
                             compileStatement.close();

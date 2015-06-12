@@ -84,6 +84,7 @@ class MainController extends Controller {
 
 		$java_files = parseFolder($start_path, $java_files);
 
+		$explain = 'https://github.com/Yu-Jack/app_detect.git';
 		// while(glob($MainController) != null){
 		// 	if(count(glob($temp_path)) > 3){
 		// 		$path = $temp_path;	
@@ -100,7 +101,7 @@ class MainController extends Controller {
 		// $output = system('/opt/mobisec/Android/sdk/build-tools/22.0.1/aapt dump badging /home/mobisec/Downloads/AndroidLabs11.apk', $return_var);
 		// exec('/opt/mobisec/Android/sdk/build-tools/22.0.1/aapt dump badging /home/mobisec/Downloads/AndroidLabs11.apk', $datas, $return_var);
 		// dd($datas);
-
+		
 		return view('detail')->with('datas', $output)->with('filename', $file)->with('javafiles',$java_files);
 		// return view('detail');
 		// return view('index');

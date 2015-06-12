@@ -129,19 +129,19 @@ public final class vk
                     break Label_0340;
                 }
                 int i = n;
-                vi.e.a(i);
-                final String h2 = xj.h("state");
-                Label_0354: {
-                    if (h2 == null) {
-                        break Label_0354;
-                    }
-                    final Integer n2 = this.c.get(h2);
-                    if (n2 == null) {
-                        break Label_0354;
-                    }
-                    int j = n2;
-                Label_0270_Outer:
-                    while (true) {
+            Label_0270_Outer:
+                while (true) {
+                    vi.e.a(i);
+                    final String h2 = xj.h("state");
+                    Label_0354: {
+                        if (h2 == null) {
+                            break Label_0354;
+                        }
+                        final Integer n2 = this.c.get(h2);
+                        if (n2 == null) {
+                            break Label_0354;
+                        }
+                        int j = n2;
                         vi.a.a(j);
                         final String h3 = xj.h("type");
                         Label_0368: {
@@ -167,9 +167,9 @@ public final class vk
                                     return;
                                     k = xj.c("type").intValue();
                                     continue;
-                                    j = xj.c("state").intValue();
-                                    continue Label_0270_Outer;
                                     i = xj.c("state").intValue();
+                                    continue Label_0270_Outer;
+                                    j = xj.c("state").intValue();
                                 }
                                 catch (ux ux) {
                                     throw new ux("reminder", ux);
@@ -177,8 +177,8 @@ public final class vk
                                 break;
                             }
                         }
-                        break;
                     }
+                    break;
                 }
             }
         }

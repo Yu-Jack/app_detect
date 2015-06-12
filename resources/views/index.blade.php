@@ -119,14 +119,14 @@
 		},
 		start: function (){
 			$('.progress-position').css('display', '');
+			$('#fileupload').attr('disabled', 'disabled');
+			$('.fileinput-button').addClass('btn-danger');
 		},
 		progressall: function  (e, data) {
 			var progress = parseInt(data.loaded / data.total * 100, 10);
 			$('#progress  .bar').css('width', progress + '%');
 			if(progress == 100){
 				$('.bar').html('Success to upload, wait for system');
-				$('#fileupload').attr('disabled', 'disabled');
-				$('.fileinput-button').addClass('btn-danger');
 				$('.spinner').css('display','');
 			}
 		}

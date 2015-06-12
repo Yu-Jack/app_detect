@@ -5,5 +5,5 @@ file="$1"
 dexfile="$2"
 outfolder="$3"
 ${dex} $file
-${java} -jar /var/www/project/public/decompiler.jar -jar $dexfile -o $outfolder
+${java} -jar /var/www/app_detect/public/decompiler.jar -jar $dexfile -o $outfolder
 

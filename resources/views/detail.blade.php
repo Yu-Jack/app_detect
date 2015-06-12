@@ -30,7 +30,7 @@
 					</tr>
 					@foreach ( $datas as $item)
 						<tr>
-							<td>{{ $item }}</td>
+							<td><a target="_blank" href='http://developer.android.com/reference/android/Manifest.permission.html#{{ rtrim(substr($item,42), "''") }}'>{{ $item }}</a></td>
 						</tr>
 					@endforeach					
 				</table>

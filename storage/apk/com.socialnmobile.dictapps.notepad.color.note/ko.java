@@ -324,9 +324,9 @@ public final class ko implements NoteColumns$NotesColumns, SyncIndexColumns, Syn
         final Cursor a = f.a(string, new String[0]);
         if (a != null) {
             int count = 0;
-            Long value;
             int n;
-            Label_0162_Outer:Label_0090_Outer:
+            Long value;
+            Label_0173_Outer:Label_0090_Outer:
             while (true) {
             Label_0090:
                 while (true) {
@@ -342,22 +342,22 @@ public final class ko implements NoteColumns$NotesColumns, SyncIndexColumns, Syn
                                 // iftrue(Label_0173:, !a.moveToPosition(n))
                                 // iftrue(Label_0117:, n < i)
                                 while (true) {
-                                    Block_6: {
-                                    Label_0173:
+                                Block_6:
+                                    while (true) {
                                         while (true) {
                                             return 0;
-                                            list.add(value.toString());
-                                            break Label_0173;
+                                            ++n;
+                                            break Label_0090;
                                             Label_0117: {
                                                 break Block_6;
                                             }
-                                            continue Label_0162_Outer;
+                                            continue Label_0173_Outer;
                                         }
-                                        ++n;
-                                        continue Label_0090;
+                                        list.add(value.toString());
+                                        continue Label_0090_Outer;
                                     }
                                     value = a.getLong(0);
-                                    continue Label_0090_Outer;
+                                    continue;
                                 }
                             }
                             // iftrue(Label_0173:, value == null || set != null && set.contains((Object)value))

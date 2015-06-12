@@ -81,19 +81,18 @@ public final class we implements Callable
                     break Label_0032;
                 }
                 Label_0569: {
+                    uc u;
                     xj a2 = null;
                     xj xj = null;
-                Label_0187_Outer:
+                    sl[] array;
+                    int length;
+                    int n3;
+                    sl sl;
+                    HashMap a3;
+                    xj xj2;
+                    vp c;
+                    Label_0143_Outer:Label_0187_Outer:
                     while (true) {
-                        int n3;
-                        int length;
-                        uc u;
-                        sl[] array;
-                        sl sl;
-                        HashMap a3;
-                        xj xj2;
-                        vp c;
-                        Block_11_Outer:Label_0143_Outer:
                         while (true) {
                             while (true) {
                                 try {
@@ -110,32 +109,28 @@ public final class we implements Callable
                                         break Label_0032;
                                     }
                                     break Label_0569;
-                                    // iftrue(Label_0344:, a.c != null)
-                                    // iftrue(Label_0228:, n3 < length)
                                     while (true) {
                                         throw new IllegalStateException("CommitStage.c is null");
-                                        continue Label_0187_Outer;
-                                    }
-                                    while (true) {
+                                        u = this.a.u();
                                         a2 = this.a.a();
                                         a2.a("authentication", u.d, new tk());
                                         xj = new xj();
                                         array = new sl[] { sl.a, sl.c, sl.b };
                                         length = array.length;
                                         n3 = 0;
-                                        continue Block_11_Outer;
-                                        u = this.a.u();
                                         continue Label_0143_Outer;
                                     }
                                 }
+                                // iftrue(Label_0344:, a.c != null)
                                 // iftrue(Label_0222:, u.e != null)
+                                // iftrue(Label_0228:, n3 < length)
                                 finally {
                                     a.a();
                                 }
                                 Label_0222: {
                                     a2 = null;
                                 }
-                                continue;
+                                continue Label_0187_Outer;
                             }
                             Label_0228: {
                                 sl = array[n3];
@@ -150,7 +145,7 @@ public final class we implements Callable
                             }
                             xj.a(sl.e, xj2);
                             ++n3;
-                            continue Label_0143_Outer;
+                            continue;
                         }
                     }
                     Label_0344: {
