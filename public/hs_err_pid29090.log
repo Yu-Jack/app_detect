@@ -1,0 +1,729 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGBUS (0x7) at pc=0x00007f390f9e3f5d, pid=29090, tid=139883176130304
+#
+# JRE version: OpenJDK Runtime Environment (7.0_75-b13) (build 1.7.0_75-b13)
+# Java VM: OpenJDK 64-Bit Server VM (24.75-b04 mixed mode linux-amd64 compressed oops)
+# Derivative: IcedTea 2.5.4
+# Distribution: Ubuntu 14.04 LTS, package 7u75-2.5.4-1~trusty1
+# Problematic frame:
+# C  [libzip.so+0x4f5d]
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please include
+# instructions on how to reproduce the bug and visit:
+#   http://icedtea.classpath.org/bugzilla
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007f391000a000):  JavaThread "main" [_thread_in_native, id=29091, stack(0x00007f3916f5f000,0x00007f3917060000)]
+
+siginfo:si_signo=SIGBUS: si_errno=0, si_code=2 (BUS_ADRERR), si_addr=0x00007f3916e95f99
+
+Registers:
+RAX=0x00007f391043d8d0, RBX=0x00007f39101a72d0, RCX=0x00007f3910000020, RDX=0x00007f391043d8d0
+RSP=0x00007f391705c790, RBP=0x00007f391705c7f0, RSI=0x00007f3910000038, RDI=0x00007f3910000020
+R8 =0x0000000000000003, R9 =0x0000000000000005, R10=0x00007f390c9f17ac, R11=0x00007f3915ca3dd0
+R12=0x00007f39101a7b68, R13=0x00007f3916e95f7c, R14=0x00007f391043d8d0, R15=0x0000000085c81caa
+RIP=0x00007f390f9e3f5d, EFLAGS=0x0000000000010202, CSGSFS=0x0000000000000033, ERR=0x0000000000000004
+  TRAPNO=0x000000000000000e
+
+Top of Stack: (sp=0x00007f391705c790)
+0x00007f391705c790:   00000000f63defc0 00007f3900000000
+0x00007f391705c7a0:   0000000000000000 0000000000000000
+0x00007f391705c7b0:   00007f39f640c0a0 00007f3915bd67cc
+0x00007f391705c7c0:   00007f391705c860 00007f39101a7b60
+0x00007f391705c7d0:   00007f39101a72d0 00007f391705c860
+0x00007f391705c7e0:   00007f39103fff60 0000000085c81caa
+0x00007f391705c7f0:   00007f391705c840 00007f390f9e4d0d
+0x00007f391705c800:   00000000cc9798a8 0000004000000000
+0x00007f391705c810:   00007f39f6435150 00007f391705c860
+0x00007f391705c820:   00007f391705cd38 00007f391705c860
+0x00007f391705c830:   0000000000000040 00007f391000a1d8
+0x00007f391705c840:   00007f391705cca0 00007f390f9e2958
+0x00007f391705c850:   000000011705c8a0 00007f39101a72d0
+0x00007f391705c860:   756365732f6d6f63 706d6f6379746972
+0x00007f391705c870:   72646e612f737361 2f7362616c64696f
+0x00007f391705c880:   6569562f65736162 656d657461745377
+0x00007f391705c890:   697669746341746e 7373616c632e7974
+0x00007f391705c8a0:   00007f391000a000 00000000f61eb730
+0x00007f391705c8b0:   00007f391705c980 00007f390c9ef5eb
+0x00007f391705c8c0:   00007f390c9e4310 00007f3900000000
+0x00007f391705c8d0:   00007f391705c9c0 00007f391705c980
+0x00007f391705c8e0:   0000000000000000 00007f391000a000
+0x00007f391705c8f0:   0000000000000000 00000000f61dc2e0
+0x00007f391705c900:   00007f391705caa0 00007f391000a000
+0x00007f391705c910:   00007f391705c960 00007f3915a27046
+0x00007f391705c920:   00000000f61eb730 00007f391705c928
+0x00007f391705c930:   00000000f5f61dc8 00007f391705c978
+0x00007f391705c940:   00000000f5fb6598 00000000f63df8d0
+0x00007f391705c950:   00000000f5f61de0 0000000000000000
+0x00007f391705c960:   00007f391705c978 00007f391705c9c0
+0x00007f391705c970:   00007f391705c970 00000000f5a327a8
+0x00007f391705c980:   00007f391705c9c0 00000000f5abcf30 
+
+Instructions: (pc=0x00007f390f9e3f5d)
+0x00007f390f9e3f3d:   73 48 48 8b 7b 10 b9 a0 00 00 00 49 8b 14 24 e8
+0x00007f390f9e3f4d:   8f fe ff ff 49 89 c5 4d 85 ed 0f 84 d3 04 00 00
+0x00007f390f9e3f5d:   41 0f b6 55 1d 41 0f b6 45 1c 45 31 e4 41 0f b6
+0x00007f390f9e3f6d:   75 0d 41 0f b6 7d 0e 45 0f b6 7d 1f c1 e2 08 09 
+
+Register to memory mapping:
+
+RAX=0x00007f391043d8d0 is an unknown value
+RBX=0x00007f39101a72d0 is an unknown value
+RCX=0x00007f3910000020 is an unknown value
+RDX=0x00007f391043d8d0 is an unknown value
+RSP=0x00007f391705c790 is pointing into the stack for thread: 0x00007f391000a000
+RBP=0x00007f391705c7f0 is pointing into the stack for thread: 0x00007f391000a000
+RSI=0x00007f3910000038 is an unknown value
+RDI=0x00007f3910000020 is an unknown value
+R8 =0x0000000000000003 is an unknown value
+R9 =0x0000000000000005 is an unknown value
+R10=0x00007f390c9f17ac is at code_begin+620 in an Interpreter codelet
+method entry point (kind = native)  [0x00007f390c9f1540, 0x00007f390c9f1d80]  2112 bytes
+R11=0x00007f3915ca3dd0: <offset 0x85cdd0> in /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so at 0x00007f3915447000
+R12=0x00007f39101a7b68 is an unknown value
+R13=0x00007f3916e95f7c is an unknown value
+R14=0x00007f391043d8d0 is an unknown value
+R15=0x0000000085c81caa is an unknown value
+
+
+Stack: [0x00007f3916f5f000,0x00007f3917060000],  sp=0x00007f391705c790,  free space=1013k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libzip.so+0x4f5d]
+C  [libzip.so+0x5d0d]  ZIP_GetEntry+0xcd
+C  [libzip.so+0x3958]  Java_java_util_zip_ZipFile_getEntry+0xa8
+j  java.util.zip.ZipFile.getEntry(J[BZ)J+0
+j  java.util.zip.ZipFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;+38
+j  java.util.jar.JarFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;+2
+j  java.util.jar.JarFile.getJarEntry(Ljava/lang/String;)Ljava/util/jar/JarEntry;+2
+j  com.strobel.assembler.metadata.JarTypeLoader.tryLoadType(Ljava/lang/String;Lcom/strobel/assembler/metadata/Buffer;)Z+65
+j  com.strobel.assembler.metadata.CompositeTypeLoader.tryLoadType(Ljava/lang/String;Lcom/strobel/assembler/metadata/Buffer;)Z+29
+J 284 C2 com.strobel.decompiler.NoRetryMetadataSystem.resolveType(Ljava/lang/String;Z)Lcom/strobel/assembler/metadata/TypeDefinition; (39 bytes) @ 0x00007f390ca863d0 [0x00007f390ca85cc0+0x710]
+J 288 C2 com.strobel.assembler.metadata.MetadataSystem.resolveCore(Lcom/strobel/assembler/metadata/TypeReference;)Lcom/strobel/assembler/metadata/TypeDefinition; (17 bytes) @ 0x00007f390ca84660 [0x00007f390ca84600+0x60]
+j  com.strobel.assembler.metadata.MetadataResolver.resolve(Lcom/strobel/assembler/metadata/TypeReference;)Lcom/strobel/assembler/metadata/TypeDefinition;+125
+j  com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve()Lcom/strobel/assembler/metadata/TypeDefinition;+8
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.convertType(Lcom/strobel/assembler/metadata/TypeReference;Lcom/strobel/core/MutableInteger;Lcom/strobel/decompiler/languages/java/ast/ConvertTypeOptions;)Lcom/strobel/decompiler/languages/java/ast/AstType;+475
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.convertType(Lcom/strobel/assembler/metadata/TypeReference;Lcom/strobel/decompiler/languages/java/ast/ConvertTypeOptions;)Lcom/strobel/decompiler/languages/java/ast/AstType;+11
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.convertType(Lcom/strobel/assembler/metadata/TypeReference;)Lcom/strobel/decompiler/languages/java/ast/AstType;+9
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+37
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+130
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+130
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformNode(Lcom/strobel/decompiler/ast/Node;Lcom/strobel/decompiler/ast/Node;)Lcom/strobel/decompiler/languages/java/ast/Statement;+225
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformBlock(Lcom/strobel/decompiler/ast/Block;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+77
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+485
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Lcom/strobel/decompiler/languages/java/ast/AstBuilder;Lcom/strobel/assembler/metadata/MethodDefinition;Lcom/strobel/decompiler/DecompilerContext;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+47
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(Lcom/strobel/assembler/metadata/MethodDefinition;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+14
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(Lcom/strobel/assembler/metadata/MethodDefinition;)Lcom/strobel/decompiler/languages/java/ast/MethodDeclaration;+220
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;Lcom/strobel/assembler/metadata/TypeDefinition;)V+104
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+431
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+25
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createType(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+44
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformCall(ZLcom/strobel/decompiler/ast/Expression;Ljava/util/List;)Lcom/strobel/decompiler/languages/java/ast/Expression;+431
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3197
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+130
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformNode(Lcom/strobel/decompiler/ast/Node;Lcom/strobel/decompiler/ast/Node;)Lcom/strobel/decompiler/languages/java/ast/Statement;+225
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformBlock(Lcom/strobel/decompiler/ast/Block;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+77
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+485
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Lcom/strobel/decompiler/languages/java/ast/AstBuilder;Lcom/strobel/assembler/metadata/MethodDefinition;Lcom/strobel/decompiler/DecompilerContext;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+47
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(Lcom/strobel/assembler/metadata/MethodDefinition;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+14
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(Lcom/strobel/assembler/metadata/MethodDefinition;)Lcom/strobel/decompiler/languages/java/ast/MethodDeclaration;+220
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;Lcom/strobel/assembler/metadata/TypeDefinition;)V+104
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+431
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+25
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createType(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+44
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.addType(Lcom/strobel/assembler/metadata/TypeDefinition;)V+2
+j  com.strobel.decompiler.languages.java.JavaLanguage.buildAst(Lcom/strobel/assembler/metadata/TypeDefinition;Lcom/strobel/decompiler/DecompilationOptions;)Lcom/strobel/decompiler/languages/java/ast/AstBuilder;+10
+j  com.strobel.decompiler.languages.java.JavaLanguage.decompileType(Lcom/strobel/assembler/metadata/TypeDefinition;Lcom/strobel/decompiler/ITextOutput;Lcom/strobel/decompiler/DecompilationOptions;)Lcom/strobel/decompiler/languages/TypeDecompilationResults;+3
+j  com.strobel.decompiler.DecompilerDriver.decompileType(Lcom/strobel/assembler/metadata/MetadataSystem;Ljava/lang/String;Lcom/strobel/decompiler/CommandLineOptions;Lcom/strobel/decompiler/DecompilationOptions;Z)V+243
+j  com.strobel.decompiler.DecompilerDriver.decompileJar(Ljava/lang/String;Lcom/strobel/decompiler/CommandLineOptions;Lcom/strobel/decompiler/DecompilationOptions;)V+206
+j  com.strobel.decompiler.DecompilerDriver.main([Ljava/lang/String;)V+414
+v  ~StubRoutines::call_stub
+V  [libjvm.so+0x5e7fc9]  JavaCalls::call_helper(JavaValue*, methodHandle*, JavaCallArguments*, Thread*)+0x339
+V  [libjvm.so+0x5e7a68]  JavaCalls::call(JavaValue*, methodHandle, JavaCallArguments*, Thread*)+0x28
+V  [libjvm.so+0x5f6b9b]  jni_invoke_static(JNIEnv_*, JavaValue*, _jobject*, JNICallType, _jmethodID*, JNI_ArgumentPusher*, Thread*) [clone .isra.124] [clone .constprop.156]+0x28b
+V  [libjvm.so+0x607e08]  jni_CallStaticVoidMethod+0x118
+C  [libjli.so+0x31f9]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  java.util.zip.ZipFile.getEntry(J[BZ)J+0
+j  java.util.zip.ZipFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;+38
+j  java.util.jar.JarFile.getEntry(Ljava/lang/String;)Ljava/util/zip/ZipEntry;+2
+j  java.util.jar.JarFile.getJarEntry(Ljava/lang/String;)Ljava/util/jar/JarEntry;+2
+j  com.strobel.assembler.metadata.JarTypeLoader.tryLoadType(Ljava/lang/String;Lcom/strobel/assembler/metadata/Buffer;)Z+65
+j  com.strobel.assembler.metadata.CompositeTypeLoader.tryLoadType(Ljava/lang/String;Lcom/strobel/assembler/metadata/Buffer;)Z+29
+J 284 C2 com.strobel.decompiler.NoRetryMetadataSystem.resolveType(Ljava/lang/String;Z)Lcom/strobel/assembler/metadata/TypeDefinition; (39 bytes) @ 0x00007f390ca863d0 [0x00007f390ca85cc0+0x710]
+J 288 C2 com.strobel.assembler.metadata.MetadataSystem.resolveCore(Lcom/strobel/assembler/metadata/TypeReference;)Lcom/strobel/assembler/metadata/TypeDefinition; (17 bytes) @ 0x00007f390ca84660 [0x00007f390ca84600+0x60]
+j  com.strobel.assembler.metadata.MetadataResolver.resolve(Lcom/strobel/assembler/metadata/TypeReference;)Lcom/strobel/assembler/metadata/TypeDefinition;+125
+j  com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve()Lcom/strobel/assembler/metadata/TypeDefinition;+8
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.convertType(Lcom/strobel/assembler/metadata/TypeReference;Lcom/strobel/core/MutableInteger;Lcom/strobel/decompiler/languages/java/ast/ConvertTypeOptions;)Lcom/strobel/decompiler/languages/java/ast/AstType;+475
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.convertType(Lcom/strobel/assembler/metadata/TypeReference;Lcom/strobel/decompiler/languages/java/ast/ConvertTypeOptions;)Lcom/strobel/decompiler/languages/java/ast/AstType;+11
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.convertType(Lcom/strobel/assembler/metadata/TypeReference;)Lcom/strobel/decompiler/languages/java/ast/AstType;+9
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+37
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+130
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+130
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformNode(Lcom/strobel/decompiler/ast/Node;Lcom/strobel/decompiler/ast/Node;)Lcom/strobel/decompiler/languages/java/ast/Statement;+225
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformBlock(Lcom/strobel/decompiler/ast/Block;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+77
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+485
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Lcom/strobel/decompiler/languages/java/ast/AstBuilder;Lcom/strobel/assembler/metadata/MethodDefinition;Lcom/strobel/decompiler/DecompilerContext;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+47
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(Lcom/strobel/assembler/metadata/MethodDefinition;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+14
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(Lcom/strobel/assembler/metadata/MethodDefinition;)Lcom/strobel/decompiler/languages/java/ast/MethodDeclaration;+220
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;Lcom/strobel/assembler/metadata/TypeDefinition;)V+104
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+431
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+25
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createType(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+44
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformCall(ZLcom/strobel/decompiler/ast/Expression;Ljava/util/List;)Lcom/strobel/decompiler/languages/java/ast/Expression;+431
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3197
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformByteCode(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+130
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformExpression(Lcom/strobel/decompiler/ast/Expression;Z)Lcom/strobel/decompiler/languages/java/ast/AstNode;+3
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformNode(Lcom/strobel/decompiler/ast/Node;Lcom/strobel/decompiler/ast/Node;)Lcom/strobel/decompiler/languages/java/ast/Statement;+225
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.transformBlock(Lcom/strobel/decompiler/ast/Block;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+77
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+485
+j  com.strobel.decompiler.languages.java.ast.AstMethodBodyBuilder.createMethodBody(Lcom/strobel/decompiler/languages/java/ast/AstBuilder;Lcom/strobel/assembler/metadata/MethodDefinition;Lcom/strobel/decompiler/DecompilerContext;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+47
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethodBody(Lcom/strobel/assembler/metadata/MethodDefinition;Ljava/lang/Iterable;)Lcom/strobel/decompiler/languages/java/ast/BlockStatement;+14
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createMethod(Lcom/strobel/assembler/metadata/MethodDefinition;)Lcom/strobel/decompiler/languages/java/ast/MethodDeclaration;+220
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.addTypeMembers(Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;Lcom/strobel/assembler/metadata/TypeDefinition;)V+104
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeCore(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+431
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createTypeNoCache(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+25
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.createType(Lcom/strobel/assembler/metadata/TypeDefinition;)Lcom/strobel/decompiler/languages/java/ast/TypeDeclaration;+44
+j  com.strobel.decompiler.languages.java.ast.AstBuilder.addType(Lcom/strobel/assembler/metadata/TypeDefinition;)V+2
+j  com.strobel.decompiler.languages.java.JavaLanguage.buildAst(Lcom/strobel/assembler/metadata/TypeDefinition;Lcom/strobel/decompiler/DecompilationOptions;)Lcom/strobel/decompiler/languages/java/ast/AstBuilder;+10
+j  com.strobel.decompiler.languages.java.JavaLanguage.decompileType(Lcom/strobel/assembler/metadata/TypeDefinition;Lcom/strobel/decompiler/ITextOutput;Lcom/strobel/decompiler/DecompilationOptions;)Lcom/strobel/decompiler/languages/TypeDecompilationResults;+3
+j  com.strobel.decompiler.DecompilerDriver.decompileType(Lcom/strobel/assembler/metadata/MetadataSystem;Ljava/lang/String;Lcom/strobel/decompiler/CommandLineOptions;Lcom/strobel/decompiler/DecompilationOptions;Z)V+243
+j  com.strobel.decompiler.DecompilerDriver.decompileJar(Ljava/lang/String;Lcom/strobel/decompiler/CommandLineOptions;Lcom/strobel/decompiler/DecompilationOptions;)V+206
+j  com.strobel.decompiler.DecompilerDriver.main([Ljava/lang/String;)V+414
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+  0x00007f39100cc000 JavaThread "Service Thread" daemon [_thread_blocked, id=29098, stack(0x00007f38ffdfe000,0x00007f38ffeff000)]
+  0x00007f39100c9800 JavaThread "C2 CompilerThread1" daemon [_thread_in_native, id=29097, stack(0x00007f38ffeff000,0x00007f3900000000)]
+  0x00007f39100c7000 JavaThread "C2 CompilerThread0" daemon [_thread_in_native, id=29096, stack(0x00007f390c0db000,0x00007f390c1dc000)]
+  0x00007f39100c5000 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=29095, stack(0x00007f390c1dc000,0x00007f390c2dd000)]
+  0x00007f3910099000 JavaThread "Finalizer" daemon [_thread_blocked, id=29094, stack(0x00007f390c2dd000,0x00007f390c3de000)]
+  0x00007f3910097000 JavaThread "Reference Handler" daemon [_thread_blocked, id=29093, stack(0x00007f390c3de000,0x00007f390c4df000)]
+=>0x00007f391000a000 JavaThread "main" [_thread_in_native, id=29091, stack(0x00007f3916f5f000,0x00007f3917060000)]
+
+Other Threads:
+  0x00007f3910092800 VMThread [stack: 0x00007f390c4df000,0x00007f390c5e0000] [id=29092]
+  0x00007f39100d7000 WatcherThread [stack: 0x00007f38ffcfd000,0x00007f38ffdfe000] [id=29099]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ def new generation   total 9664K, used 2661K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K,  24% used [0x00000000cc000000, 0x00000000cc206a80, 0x00000000cc870000)
+  from space 1024K,  57% used [0x00000000cc970000, 0x00000000cca02ae0, 0x00000000cca70000)
+  to   space 1024K,   0% used [0x00000000cc870000, 0x00000000cc870000, 0x00000000cc970000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10516K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f64450f8, 0x00000000f6445200, 0x00000000f6ec0000)
+No shared spaces configured.
+
+Card table byte_map: [0x00007f391401a000,0x00007f39141bb000] byte_map_base: 0x00007f39139ba000
+
+Polling page: 0x00007f3917078000
+
+Code Cache  [0x00007f390c9df000, 0x00007f390cc4f000, 0x00007f390f9df000)
+ total_blobs=656 nmethods=406 adapters=203 free_code_cache=47526Kb largest_free_block=48600576
+
+Compilation events (10 events):
+Event: 12.234 Thread 0x00007f39100c7000 nmethod 412 0x00007f390cb5e450 code [0x00007f390cb5ec80, 0x00007f390cb63a50]
+Event: 12.234 Thread 0x00007f39100c7000  415             com.strobel.decompiler.ast.TypeAnalysis::findNestedAssignments (503 bytes)
+Event: 12.442 Thread 0x00007f39100c7000 nmethod 415 0x00007f390cb3d8d0 code [0x00007f390cb3dc60, 0x00007f390cb3f138]
+Event: 12.442 Thread 0x00007f39100c7000  416             com.strobel.assembler.metadata.MetadataHelper$8::visitClassType (133 bytes)
+Event: 12.530 Thread 0x00007f39100c7000 nmethod 416 0x00007f390cb03350 code [0x00007f390cb03560, 0x00007f390cb03c28]
+Event: 12.530 Thread 0x00007f39100c7000  417             com.strobel.decompiler.ast.Expression::setExpectedType (6 bytes)
+Event: 12.531 Thread 0x00007f39100c7000 nmethod 417 0x00007f390cb03150 code [0x00007f390cb03280, 0x00007f390cb032f8]
+Event: 12.531 Thread 0x00007f39100c7000  418             com.strobel.assembler.metadata.CoreMetadataFactory$MethodSignature::getParameters (5 bytes)
+Event: 12.531 Thread 0x00007f39100c7000 nmethod 418 0x00007f390cb02c50 code [0x00007f390cb02d80, 0x00007f390cb02dd8]
+Event: 12.531 Thread 0x00007f39100c7000  419             com.strobel.decompiler.languages.java.ast.NameVariables::generateNameForVariable (543 bytes)
+
+GC Heap History (10 events):
+Event: 9.485 GC heap before
+{Heap before GC invocations=18 (full 0):
+ def new generation   total 9664K, used 9605K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K, 100% used [0x00000000cc000000, 0x00000000cc870000, 0x00000000cc870000)
+  from space 1024K,  94% used [0x00000000cc870000, 0x00000000cc961578, 0x00000000cc970000)
+  to   space 1024K,   0% used [0x00000000cc970000, 0x00000000cc970000, 0x00000000cca70000)
+ tenured generation   total 21376K, used 17234K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  80% used [0x00000000d9e00000, 0x00000000daed4a38, 0x00000000daed4c00, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10456K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f6436290, 0x00000000f6436400, 0x00000000f6ec0000)
+No shared spaces configured.
+Event: 9.493 GC heap after
+Heap after GC invocations=19 (full 0):
+ def new generation   total 9664K, used 1022K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K,   0% used [0x00000000cc000000, 0x00000000cc000000, 0x00000000cc870000)
+  from space 1024K,  99% used [0x00000000cc970000, 0x00000000cca6f9d0, 0x00000000cca70000)
+  to   space 1024K,   0% used [0x00000000cc870000, 0x00000000cc870000, 0x00000000cc970000)
+ tenured generation   total 21376K, used 18036K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  84% used [0x00000000d9e00000, 0x00000000daf9d380, 0x00000000daf9d400, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10456K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f6436290, 0x00000000f6436400, 0x00000000f6ec0000)
+No shared spaces configured.
+}
+Event: 10.016 GC heap before
+{Heap before GC invocations=19 (full 0):
+ def new generation   total 9664K, used 9662K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K, 100% used [0x00000000cc000000, 0x00000000cc870000, 0x00000000cc870000)
+  from space 1024K,  99% used [0x00000000cc970000, 0x00000000cca6f9d0, 0x00000000cca70000)
+  to   space 1024K,   0% used [0x00000000cc870000, 0x00000000cc870000, 0x00000000cc970000)
+ tenured generation   total 21376K, used 18036K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  84% used [0x00000000d9e00000, 0x00000000daf9d380, 0x00000000daf9d400, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10459K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f6436d68, 0x00000000f6436e00, 0x00000000f6ec0000)
+No shared spaces configured.
+Event: 10.019 GC heap after
+Heap after GC invocations=20 (full 0):
+ def new generation   total 9664K, used 82K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K,   0% used [0x00000000cc000000, 0x00000000cc000000, 0x00000000cc870000)
+  from space 1024K,   8% used [0x00000000cc870000, 0x00000000cc884938, 0x00000000cc970000)
+  to   space 1024K,   0% used [0x00000000cc970000, 0x00000000cc970000, 0x00000000cca70000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10459K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f6436d68, 0x00000000f6436e00, 0x00000000f6ec0000)
+No shared spaces configured.
+}
+Event: 10.946 GC heap before
+{Heap before GC invocations=20 (full 0):
+ def new generation   total 9664K, used 8722K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K, 100% used [0x00000000cc000000, 0x00000000cc870000, 0x00000000cc870000)
+  from space 1024K,   8% used [0x00000000cc870000, 0x00000000cc884938, 0x00000000cc970000)
+  to   space 1024K,   0% used [0x00000000cc970000, 0x00000000cc970000, 0x00000000cca70000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10491K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f643ee78, 0x00000000f643f000, 0x00000000f6ec0000)
+No shared spaces configured.
+Event: 10.947 GC heap after
+Heap after GC invocations=21 (full 0):
+ def new generation   total 9664K, used 350K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K,   0% used [0x00000000cc000000, 0x00000000cc000000, 0x00000000cc870000)
+  from space 1024K,  34% used [0x00000000cc970000, 0x00000000cc9c78d8, 0x00000000cca70000)
+  to   space 1024K,   0% used [0x00000000cc870000, 0x00000000cc870000, 0x00000000cc970000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10491K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f643ee78, 0x00000000f643f000, 0x00000000f6ec0000)
+No shared spaces configured.
+}
+Event: 11.604 GC heap before
+{Heap before GC invocations=21 (full 0):
+ def new generation   total 9664K, used 8990K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K, 100% used [0x00000000cc000000, 0x00000000cc870000, 0x00000000cc870000)
+  from space 1024K,  34% used [0x00000000cc970000, 0x00000000cc9c78d8, 0x00000000cca70000)
+  to   space 1024K,   0% used [0x00000000cc870000, 0x00000000cc870000, 0x00000000cc970000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10503K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f6441f88, 0x00000000f6442000, 0x00000000f6ec0000)
+No shared spaces configured.
+Event: 11.605 GC heap after
+Heap after GC invocations=22 (full 0):
+ def new generation   total 9664K, used 410K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K,   0% used [0x00000000cc000000, 0x00000000cc000000, 0x00000000cc870000)
+  from space 1024K,  40% used [0x00000000cc870000, 0x00000000cc8d6be0, 0x00000000cc970000)
+  to   space 1024K,   0% used [0x00000000cc970000, 0x00000000cc970000, 0x00000000cca70000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10503K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f6441f88, 0x00000000f6442000, 0x00000000f6ec0000)
+No shared spaces configured.
+}
+Event: 12.347 GC heap before
+{Heap before GC invocations=22 (full 0):
+ def new generation   total 9664K, used 9050K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K, 100% used [0x00000000cc000000, 0x00000000cc870000, 0x00000000cc870000)
+  from space 1024K,  40% used [0x00000000cc870000, 0x00000000cc8d6be0, 0x00000000cc970000)
+  to   space 1024K,   0% used [0x00000000cc970000, 0x00000000cc970000, 0x00000000cca70000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10513K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f64444a8, 0x00000000f6444600, 0x00000000f6ec0000)
+No shared spaces configured.
+Event: 12.348 GC heap after
+Heap after GC invocations=23 (full 0):
+ def new generation   total 9664K, used 586K [0x00000000cc000000, 0x00000000cca70000, 0x00000000d9e00000)
+  eden space 8640K,   0% used [0x00000000cc000000, 0x00000000cc000000, 0x00000000cc870000)
+  from space 1024K,  57% used [0x00000000cc970000, 0x00000000cca02ae0, 0x00000000cca70000)
+  to   space 1024K,   0% used [0x00000000cc870000, 0x00000000cc870000, 0x00000000cc970000)
+ tenured generation   total 21376K, used 18941K [0x00000000d9e00000, 0x00000000db2e0000, 0x00000000f5a00000)
+   the space 21376K,  88% used [0x00000000d9e00000, 0x00000000db07f7f0, 0x00000000db07f800, 0x00000000db2e0000)
+ compacting perm gen  total 21248K, used 10513K [0x00000000f5a00000, 0x00000000f6ec0000, 0x0000000100000000)
+   the space 21248K,  49% used [0x00000000f5a00000, 0x00000000f64444a8, 0x00000000f6444600, 0x00000000f6ec0000)
+No shared spaces configured.
+}
+
+Deoptimization events (10 events):
+Event: 6.291 Thread 0x00007f391000a000 Uncommon trap: reason=array_check action=maybe_recompile pc=0x00007f390caf40b0 method=com.strobel.core.ArrayUtilities.union([Ljava/lang/Object;[Ljava/lang/Object;)[Ljava/lang/Object; @ 142
+Event: 6.557 Thread 0x00007f391000a000 Uncommon trap: reason=bimorphic action=maybe_recompile pc=0x00007f390ca8f620 method=com.strobel.decompiler.ast.Node.accumulateSelfAndChildrenRecursive(Ljava/util/List;Ljava/lang/Class;Lcom/strobel/core/Predicate;Z)V @ 58
+Event: 6.557 Thread 0x00007f391000a000 Uncommon trap: reason=predicate action=maybe_recompile pc=0x00007f390ca8f674 method=com.strobel.decompiler.ast.Node.accumulateSelfAndChildrenRecursive(Ljava/util/List;Ljava/lang/Class;Lcom/strobel/core/Predicate;Z)V @ 56
+Event: 6.568 Thread 0x00007f391000a000 Uncommon trap: reason=predicate action=maybe_recompile pc=0x00007f390caefed4 method=com.strobel.decompiler.ast.Inlining.analyzeNode(Lcom/strobel/decompiler/ast/Node;)V @ 362
+Event: 7.120 Thread 0x00007f391000a000 Uncommon trap: reason=unloaded action=reinterpret pc=0x00007f390caa29b8 method=com.strobel.assembler.ir.ConstantPool.read(Lcom/strobel/assembler/metadata/Buffer;)Lcom/strobel/assembler/ir/ConstantPool; @ 168
+Event: 8.881 Thread 0x00007f391000a000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f390cae8f08 method=com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve()Lcom/strobel/assembler/metadata/TypeDefinition; @ 8
+Event: 8.881 Thread 0x00007f391000a000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f390cae8f08 method=com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve()Lcom/strobel/assembler/metadata/TypeDefinition; @ 8
+Event: 8.881 Thread 0x00007f391000a000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f390cae8f08 method=com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve()Lcom/strobel/assembler/metadata/TypeDefinition; @ 8
+Event: 8.881 Thread 0x00007f391000a000 Uncommon trap: reason=class_check action=maybe_recompile pc=0x00007f390cae8f08 method=com.strobel.assembler.metadata.CoreMetadataFactory$UnresolvedType.resolve()Lcom/strobel/assembler/metadata/TypeDefinition; @ 8
+Event: 9.956 Thread 0x00007f391000a000 Uncommon trap: reason=null_check action=make_not_entrant pc=0x00007f390cb244b8 method=com.strobel.decompiler.ast.AstBuilder.mappedInstruction(Ljava/util/Map;Lcom/strobel/assembler/ir/Instruction;)Lcom/strobel/assembler/ir/Instruction; @ 9
+
+Internal exceptions (10 events):
+Event: 4.923 Thread 0x00007f391000a000 Threw 0x00000000cc68d658 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 4.928 Thread 0x00007f391000a000 Threw 0x00000000cc6925e8 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 4.978 Thread 0x00007f391000a000 Threw 0x00000000cc704920 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 4.989 Thread 0x00007f391000a000 Threw 0x00000000cc7294d8 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 4.990 Thread 0x00007f391000a000 Threw 0x00000000cc734cd0 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 5.008 Thread 0x00007f391000a000 Threw 0x00000000cc740580 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 6.241 Thread 0x00007f391000a000 Implicit null exception at 0x00007f390cab3c8c to 0x00007f390cab3cba
+Event: 6.557 Thread 0x00007f391000a000 Threw 0x00000000cc3c5350 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 8.610 Thread 0x00007f391000a000 Threw 0x00000000cc182418 at /build/buildd/openjdk-7-7u75-2.5.4/build/openjdk/hotspot/src/share/vm/prims/jvm.cpp:1284
+Event: 9.956 Thread 0x00007f391000a000 Implicit null exception at 0x00007f390cb1eb50 to 0x00007f390cb24445
+
+Events (10 events):
+Event: 12.349 Executing VM operation: RevokeBias
+Event: 12.349 Executing VM operation: RevokeBias done
+Event: 12.349 Executing VM operation: RevokeBias
+Event: 12.349 Executing VM operation: RevokeBias done
+Event: 12.349 Executing VM operation: RevokeBias
+Event: 12.349 Executing VM operation: RevokeBias done
+Event: 12.349 Executing VM operation: RevokeBias
+Event: 12.349 Executing VM operation: RevokeBias done
+Event: 12.349 Executing VM operation: BulkRevokeBias
+Event: 12.349 Executing VM operation: BulkRevokeBias done
+
+
+Dynamic libraries:
+00400000-00401000 r-xp 00000000 08:01 805237                             /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+00600000-00601000 r--p 00000000 08:01 805237                             /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+00601000-00602000 rw-p 00001000 08:01 805237                             /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+023de000-023ff000 rw-p 00000000 00:00 0                                  [heap]
+cc000000-cca70000 rw-p 00000000 00:00 0 
+cca70000-d9e00000 rw-p 00000000 00:00 0 
+d9e00000-db2e0000 rw-p 00000000 00:00 0 
+db2e0000-f5a00000 rw-p 00000000 00:00 0 
+f5a00000-f6ec0000 rw-p 00000000 00:00 0 
+f6ec0000-100000000 rw-p 00000000 00:00 0 
+7f38ec000000-7f38ed9d0000 rw-p 00000000 00:00 0 
+7f38ed9d0000-7f38f0000000 ---p 00000000 00:00 0 
+7f38f0000000-7f38f0021000 rw-p 00000000 00:00 0 
+7f38f0021000-7f38f4000000 ---p 00000000 00:00 0 
+7f38f4000000-7f38f6282000 rw-p 00000000 00:00 0 
+7f38f6282000-7f38f8000000 ---p 00000000 00:00 0 
+7f38f8000000-7f38f8021000 rw-p 00000000 00:00 0 
+7f38f8021000-7f38fc000000 ---p 00000000 00:00 0 
+7f38fe57f000-7f38fe5bc000 r-xp 00000000 08:01 131315                     /lib/x86_64-linux-gnu/libpcre.so.3.13.1
+7f38fe5bc000-7f38fe7bb000 ---p 0003d000 08:01 131315                     /lib/x86_64-linux-gnu/libpcre.so.3.13.1
+7f38fe7bb000-7f38fe7bc000 r--p 0003c000 08:01 131315                     /lib/x86_64-linux-gnu/libpcre.so.3.13.1
+7f38fe7bc000-7f38fe7bd000 rw-p 0003d000 08:01 131315                     /lib/x86_64-linux-gnu/libpcre.so.3.13.1
+7f38fe7bd000-7f38fe7c4000 r-xp 00000000 08:01 789353                     /usr/lib/x86_64-linux-gnu/libffi.so.6.0.1
+7f38fe7c4000-7f38fe9c3000 ---p 00007000 08:01 789353                     /usr/lib/x86_64-linux-gnu/libffi.so.6.0.1
+7f38fe9c3000-7f38fe9c4000 r--p 00006000 08:01 789353                     /usr/lib/x86_64-linux-gnu/libffi.so.6.0.1
+7f38fe9c4000-7f38fe9c5000 rw-p 00007000 08:01 789353                     /usr/lib/x86_64-linux-gnu/libffi.so.6.0.1
+7f38fe9c5000-7f38fe9dc000 r-xp 00000000 08:01 138541                     /lib/x86_64-linux-gnu/libresolv-2.19.so
+7f38fe9dc000-7f38febdc000 ---p 00017000 08:01 138541                     /lib/x86_64-linux-gnu/libresolv-2.19.so
+7f38febdc000-7f38febdd000 r--p 00017000 08:01 138541                     /lib/x86_64-linux-gnu/libresolv-2.19.so
+7f38febdd000-7f38febde000 rw-p 00018000 08:01 138541                     /lib/x86_64-linux-gnu/libresolv-2.19.so
+7f38febde000-7f38febe0000 rw-p 00000000 00:00 0 
+7f38febe0000-7f38fec00000 r-xp 00000000 08:01 131338                     /lib/x86_64-linux-gnu/libselinux.so.1
+7f38fec00000-7f38fedff000 ---p 00020000 08:01 131338                     /lib/x86_64-linux-gnu/libselinux.so.1
+7f38fedff000-7f38fee00000 r--p 0001f000 08:01 131338                     /lib/x86_64-linux-gnu/libselinux.so.1
+7f38fee00000-7f38fee01000 rw-p 00020000 08:01 131338                     /lib/x86_64-linux-gnu/libselinux.so.1
+7f38fee01000-7f38fee03000 rw-p 00000000 00:00 0 
+7f38fee03000-7f38fee06000 r-xp 00000000 08:01 789263                     /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.4002.0
+7f38fee06000-7f38ff005000 ---p 00003000 08:01 789263                     /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.4002.0
+7f38ff005000-7f38ff006000 r--p 00002000 08:01 789263                     /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.4002.0
+7f38ff006000-7f38ff007000 rw-p 00003000 08:01 789263                     /usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.4002.0
+7f38ff007000-7f38ff10d000 r-xp 00000000 08:01 138178                     /lib/x86_64-linux-gnu/libglib-2.0.so.0.4002.0
+7f38ff10d000-7f38ff30c000 ---p 00106000 08:01 138178                     /lib/x86_64-linux-gnu/libglib-2.0.so.0.4002.0
+7f38ff30c000-7f38ff30d000 r--p 00105000 08:01 138178                     /lib/x86_64-linux-gnu/libglib-2.0.so.0.4002.0
+7f38ff30d000-7f38ff30e000 rw-p 00106000 08:01 138178                     /lib/x86_64-linux-gnu/libglib-2.0.so.0.4002.0
+7f38ff30e000-7f38ff30f000 rw-p 00000000 00:00 0 
+7f38ff30f000-7f38ff35e000 r-xp 00000000 08:01 789265                     /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.4002.0
+7f38ff35e000-7f38ff55e000 ---p 0004f000 08:01 789265                     /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.4002.0
+7f38ff55e000-7f38ff55f000 r--p 0004f000 08:01 789265                     /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.4002.0
+7f38ff55f000-7f38ff560000 rw-p 00050000 08:01 789265                     /usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.4002.0
+7f38ff560000-7f38ff6cc000 r-xp 00000000 08:01 789269                     /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.4002.0
+7f38ff6cc000-7f38ff8cb000 ---p 0016c000 08:01 789269                     /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.4002.0
+7f38ff8cb000-7f38ff8cf000 r--p 0016b000 08:01 789269                     /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.4002.0
+7f38ff8cf000-7f38ff8d1000 rw-p 0016f000 08:01 789269                     /usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.4002.0
+7f38ff8d1000-7f38ff8d3000 rw-p 00000000 00:00 0 
+7f38ff8d3000-7f38ff8ea000 r-xp 00000000 08:01 805207                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnet.so
+7f38ff8ea000-7f38ffae9000 ---p 00017000 08:01 805207                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnet.so
+7f38ffae9000-7f38ffaea000 r--p 00016000 08:01 805207                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnet.so
+7f38ffaea000-7f38ffaeb000 rw-p 00017000 08:01 805207                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnet.so
+7f38ffaeb000-7f38ffafb000 r-xp 00000000 08:01 805203                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnio.so
+7f38ffafb000-7f38ffcfb000 ---p 00010000 08:01 805203                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnio.so
+7f38ffcfb000-7f38ffcfc000 r--p 00010000 08:01 805203                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnio.so
+7f38ffcfc000-7f38ffcfd000 rw-p 00011000 08:01 805203                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libnio.so
+7f38ffcfd000-7f38ffcfe000 ---p 00000000 00:00 0 
+7f38ffcfe000-7f38ffdfe000 rw-p 00000000 00:00 0                          [stack:29099]
+7f38ffdfe000-7f38ffe01000 ---p 00000000 00:00 0 
+7f38ffe01000-7f38ffeff000 rw-p 00000000 00:00 0                          [stack:29098]
+7f38ffeff000-7f38fff02000 ---p 00000000 00:00 0 
+7f38fff02000-7f3900000000 rw-p 00000000 00:00 0                          [stack:29097]
+7f3900000000-7f3900021000 rw-p 00000000 00:00 0 
+7f3900021000-7f3904000000 ---p 00000000 00:00 0 
+7f3904000000-7f3904021000 rw-p 00000000 00:00 0 
+7f3904021000-7f3908000000 ---p 00000000 00:00 0 
+7f3908000000-7f390803c000 rw-p 00000000 00:00 0 
+7f390803c000-7f390c000000 ---p 00000000 00:00 0 
+7f390c05f000-7f390c0c0000 rw-p 00000000 00:00 0 
+7f390c0c0000-7f390c0db000 r--s 00194000 08:01 1065720                    /var/www/project/public/decompiler.jar
+7f390c0db000-7f390c0de000 ---p 00000000 00:00 0 
+7f390c0de000-7f390c1dc000 rw-p 00000000 00:00 0                          [stack:29096]
+7f390c1dc000-7f390c1df000 ---p 00000000 00:00 0 
+7f390c1df000-7f390c2dd000 rw-p 00000000 00:00 0                          [stack:29095]
+7f390c2dd000-7f390c2e0000 ---p 00000000 00:00 0 
+7f390c2e0000-7f390c3de000 rw-p 00000000 00:00 0                          [stack:29094]
+7f390c3de000-7f390c3e1000 ---p 00000000 00:00 0 
+7f390c3e1000-7f390c4df000 rw-p 00000000 00:00 0                          [stack:29093]
+7f390c4df000-7f390c4e0000 ---p 00000000 00:00 0 
+7f390c4e0000-7f390c629000 rw-p 00000000 00:00 0                          [stack:29092]
+7f390c629000-7f390c7db000 r--s 01d23000 08:01 805171                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/rt.jar
+7f390c7db000-7f390c8b7000 rw-p 00000000 00:00 0 
+7f390c8b7000-7f390c900000 rw-p 00000000 00:00 0 
+7f390c900000-7f390c90b000 rw-p 00000000 00:00 0 
+7f390c90b000-7f390c9df000 rw-p 00000000 00:00 0 
+7f390c9df000-7f390cc4f000 rwxp 00000000 00:00 0 
+7f390cc4f000-7f390f9df000 rw-p 00000000 00:00 0 
+7f390f9df000-7f390f9e7000 r-xp 00000000 08:01 805233                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libzip.so
+7f390f9e7000-7f390fbe6000 ---p 00008000 08:01 805233                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libzip.so
+7f390fbe6000-7f390fbe7000 r--p 00007000 08:01 805233                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libzip.so
+7f390fbe7000-7f390fbe8000 rw-p 00008000 08:01 805233                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libzip.so
+7f390fbe8000-7f390fbf3000 r-xp 00000000 08:01 138546                     /lib/x86_64-linux-gnu/libnss_files-2.19.so
+7f390fbf3000-7f390fdf2000 ---p 0000b000 08:01 138546                     /lib/x86_64-linux-gnu/libnss_files-2.19.so
+7f390fdf2000-7f390fdf3000 r--p 0000a000 08:01 138546                     /lib/x86_64-linux-gnu/libnss_files-2.19.so
+7f390fdf3000-7f390fdf4000 rw-p 0000b000 08:01 138546                     /lib/x86_64-linux-gnu/libnss_files-2.19.so
+7f390fdf4000-7f390fdff000 r-xp 00000000 08:01 138543                     /lib/x86_64-linux-gnu/libnss_nis-2.19.so
+7f390fdff000-7f390fffe000 ---p 0000b000 08:01 138543                     /lib/x86_64-linux-gnu/libnss_nis-2.19.so
+7f390fffe000-7f390ffff000 r--p 0000a000 08:01 138543                     /lib/x86_64-linux-gnu/libnss_nis-2.19.so
+7f390ffff000-7f3910000000 rw-p 0000b000 08:01 138543                     /lib/x86_64-linux-gnu/libnss_nis-2.19.so
+7f3910000000-7f3910983000 rw-p 00000000 00:00 0 
+7f3910983000-7f3914000000 ---p 00000000 00:00 0 
+7f391401a000-7f3914020000 rw-p 00000000 00:00 0 
+7f3914020000-7f3914089000 rw-p 00000000 00:00 0 
+7f3914089000-7f3914094000 rw-p 00000000 00:00 0 
+7f3914094000-7f3914167000 rw-p 00000000 00:00 0 
+7f3914167000-7f3914172000 rw-p 00000000 00:00 0 
+7f3914172000-7f39141ba000 rw-p 00000000 00:00 0 
+7f39141ba000-7f39141bb000 rw-p 00000000 00:00 0 
+7f39141bb000-7f39141d2000 r-xp 00000000 08:01 138537                     /lib/x86_64-linux-gnu/libnsl-2.19.so
+7f39141d2000-7f39143d1000 ---p 00017000 08:01 138537                     /lib/x86_64-linux-gnu/libnsl-2.19.so
+7f39143d1000-7f39143d2000 r--p 00016000 08:01 138537                     /lib/x86_64-linux-gnu/libnsl-2.19.so
+7f39143d2000-7f39143d3000 rw-p 00017000 08:01 138537                     /lib/x86_64-linux-gnu/libnsl-2.19.so
+7f39143d3000-7f39143d5000 rw-p 00000000 00:00 0 
+7f39143d5000-7f39143de000 r-xp 00000000 08:01 138534                     /lib/x86_64-linux-gnu/libnss_compat-2.19.so
+7f39143de000-7f39145dd000 ---p 00009000 08:01 138534                     /lib/x86_64-linux-gnu/libnss_compat-2.19.so
+7f39145dd000-7f39145de000 r--p 00008000 08:01 138534                     /lib/x86_64-linux-gnu/libnss_compat-2.19.so
+7f39145de000-7f39145df000 rw-p 00009000 08:01 138534                     /lib/x86_64-linux-gnu/libnss_compat-2.19.so
+7f39145df000-7f391460a000 r-xp 00000000 08:01 805217                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjava.so
+7f391460a000-7f391480a000 ---p 0002b000 08:01 805217                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjava.so
+7f391480a000-7f391480b000 r--p 0002b000 08:01 805217                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjava.so
+7f391480b000-7f391480d000 rw-p 0002c000 08:01 805217                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjava.so
+7f391480d000-7f391481d000 r-xp 00000000 08:01 805216                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libverify.so
+7f391481d000-7f3914a1c000 ---p 00010000 08:01 805216                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libverify.so
+7f3914a1c000-7f3914a1e000 r--p 0000f000 08:01 805216                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libverify.so
+7f3914a1e000-7f3914a1f000 rw-p 00011000 08:01 805216                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libverify.so
+7f3914a1f000-7f3914a26000 r-xp 00000000 08:01 138529                     /lib/x86_64-linux-gnu/librt-2.19.so
+7f3914a26000-7f3914c25000 ---p 00007000 08:01 138529                     /lib/x86_64-linux-gnu/librt-2.19.so
+7f3914c25000-7f3914c26000 r--p 00006000 08:01 138529                     /lib/x86_64-linux-gnu/librt-2.19.so
+7f3914c26000-7f3914c27000 rw-p 00007000 08:01 138529                     /lib/x86_64-linux-gnu/librt-2.19.so
+7f3914c27000-7f3914c3d000 r-xp 00000000 08:01 131246                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f3914c3d000-7f3914e3c000 ---p 00016000 08:01 131246                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f3914e3c000-7f3914e3d000 rw-p 00015000 08:01 131246                     /lib/x86_64-linux-gnu/libgcc_s.so.1
+7f3914e3d000-7f3914f42000 r-xp 00000000 08:01 138536                     /lib/x86_64-linux-gnu/libm-2.19.so
+7f3914f42000-7f3915141000 ---p 00105000 08:01 138536                     /lib/x86_64-linux-gnu/libm-2.19.so
+7f3915141000-7f3915142000 r--p 00104000 08:01 138536                     /lib/x86_64-linux-gnu/libm-2.19.so
+7f3915142000-7f3915143000 rw-p 00105000 08:01 138536                     /lib/x86_64-linux-gnu/libm-2.19.so
+7f3915143000-7f3915229000 r-xp 00000000 08:01 789393                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19
+7f3915229000-7f3915428000 ---p 000e6000 08:01 789393                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19
+7f3915428000-7f3915430000 r--p 000e5000 08:01 789393                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19
+7f3915430000-7f3915432000 rw-p 000ed000 08:01 789393                     /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.19
+7f3915432000-7f3915447000 rw-p 00000000 00:00 0 
+7f3915447000-7f3915f5f000 r-xp 00000000 08:01 805222                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f3915f5f000-7f391615f000 ---p 00b18000 08:01 805222                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f391615f000-7f39161f9000 r--p 00b18000 08:01 805222                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f39161f9000-7f391621c000 rw-p 00bb2000 08:01 805222                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/server/libjvm.so
+7f391621c000-7f391624a000 rw-p 00000000 00:00 0 
+7f391624a000-7f3916262000 r-xp 00000000 08:01 131358                     /lib/x86_64-linux-gnu/libz.so.1.2.8
+7f3916262000-7f3916461000 ---p 00018000 08:01 131358                     /lib/x86_64-linux-gnu/libz.so.1.2.8
+7f3916461000-7f3916462000 r--p 00017000 08:01 131358                     /lib/x86_64-linux-gnu/libz.so.1.2.8
+7f3916462000-7f3916463000 rw-p 00018000 08:01 131358                     /lib/x86_64-linux-gnu/libz.so.1.2.8
+7f3916463000-7f391647c000 r-xp 00000000 08:01 138545                     /lib/x86_64-linux-gnu/libpthread-2.19.so
+7f391647c000-7f391667b000 ---p 00019000 08:01 138545                     /lib/x86_64-linux-gnu/libpthread-2.19.so
+7f391667b000-7f391667c000 r--p 00018000 08:01 138545                     /lib/x86_64-linux-gnu/libpthread-2.19.so
+7f391667c000-7f391667d000 rw-p 00019000 08:01 138545                     /lib/x86_64-linux-gnu/libpthread-2.19.so
+7f391667d000-7f3916681000 rw-p 00000000 00:00 0 
+7f3916681000-7f3916684000 r-xp 00000000 08:01 138532                     /lib/x86_64-linux-gnu/libdl-2.19.so
+7f3916684000-7f3916883000 ---p 00003000 08:01 138532                     /lib/x86_64-linux-gnu/libdl-2.19.so
+7f3916883000-7f3916884000 r--p 00002000 08:01 138532                     /lib/x86_64-linux-gnu/libdl-2.19.so
+7f3916884000-7f3916885000 rw-p 00003000 08:01 138532                     /lib/x86_64-linux-gnu/libdl-2.19.so
+7f3916885000-7f3916a40000 r-xp 00000000 08:01 138528                     /lib/x86_64-linux-gnu/libc-2.19.so
+7f3916a40000-7f3916c40000 ---p 001bb000 08:01 138528                     /lib/x86_64-linux-gnu/libc-2.19.so
+7f3916c40000-7f3916c44000 r--p 001bb000 08:01 138528                     /lib/x86_64-linux-gnu/libc-2.19.so
+7f3916c44000-7f3916c46000 rw-p 001bf000 08:01 138528                     /lib/x86_64-linux-gnu/libc-2.19.so
+7f3916c46000-7f3916c4b000 rw-p 00000000 00:00 0 
+7f3916c4b000-7f3916c58000 r-xp 00000000 08:01 805199                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f3916c58000-7f3916e57000 ---p 0000d000 08:01 805199                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f3916e57000-7f3916e58000 r--p 0000c000 08:01 805199                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f3916e58000-7f3916e59000 rw-p 0000d000 08:01 805199                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/jli/libjli.so
+7f3916e59000-7f3916e7c000 r-xp 00000000 08:01 138526                     /lib/x86_64-linux-gnu/ld-2.19.so
+7f3916e88000-7f3916e8b000 rw-p 00000000 00:00 0 
+7f3916e8b000-7f3916e94000 r--s 000b9000 08:01 805173                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/resources.jar
+7f3916e94000-7f3916e96000 r--s 00008000 08:01 917579                     /var/www/project/storage/apk/AndroidLabs11_dex2jar.jar
+7f3916e96000-7f3916e9a000 r--s 0003c000 08:01 805176                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/sunpkcs11.jar
+7f3916e9a000-7f3916e9c000 r--s 00012000 08:01 805178                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/zipfs.jar
+7f3916e9c000-7f3916e9f000 r--s 0000f000 08:01 805175                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/icedtea-sound.jar
+7f3916e9f000-7f3916ea9000 rw-p 00000000 00:00 0 
+7f3916ea9000-7f3916f5f000 rw-p 00000000 00:00 0 
+7f3916f5f000-7f3916f62000 ---p 00000000 00:00 0 
+7f3916f62000-7f3917065000 rw-p 00000000 00:00 0                          [stack:29091]
+7f3917065000-7f3917066000 r--s 00002000 08:01 805179                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/dnsns.jar
+7f3917066000-7f3917068000 r--s 00006000 08:01 805342                     /usr/share/java/java-atk-wrapper.jar
+7f3917068000-7f391706c000 r--s 00034000 08:01 805177                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/sunjce_provider.jar
+7f391706c000-7f391706f000 r--s 00086000 08:01 805180                     /usr/lib/jvm/java-7-openjdk-amd64/jre/lib/ext/localedata.jar
+7f391706f000-7f3917077000 rw-s 00000000 08:01 1065707                    /tmp/hsperfdata_mobisec/29090
+7f3917077000-7f3917078000 rw-p 00000000 00:00 0 
+7f3917078000-7f3917079000 r--p 00000000 00:00 0 
+7f3917079000-7f391707b000 rw-p 00000000 00:00 0 
+7f391707b000-7f391707c000 r--p 00022000 08:01 138526                     /lib/x86_64-linux-gnu/ld-2.19.so
+7f391707c000-7f391707d000 rw-p 00023000 08:01 138526                     /lib/x86_64-linux-gnu/ld-2.19.so
+7f391707d000-7f391707e000 rw-p 00000000 00:00 0 
+7fff7e058000-7fff7e079000 rw-p 00000000 00:00 0                          [stack]
+7fff7e1fe000-7fff7e200000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
+
+VM Arguments:
+java_command: /var/www/project/public/decompiler.jar -jar /var/www/project/storage/apk/AndroidLabs11_dex2jar.jar -o /var/www/project/storage/apk/AndroidLabs11
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+Signal Handlers:
+SIGSEGV: [libjvm.so+0x94b4b0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGBUS: [libjvm.so+0x94b4b0], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGFPE: [libjvm.so+0x7c3390], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGPIPE: [libjvm.so+0x7c3390], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGXFSZ: [libjvm.so+0x7c3390], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGILL: [libjvm.so+0x7c3390], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGUSR1: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+SIGUSR2: [libjvm.so+0x7c3230], sa_mask[0]=0x00000000, sa_flags=0x10000004
+SIGHUP: [libjvm.so+0x7c3410], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGINT: [libjvm.so+0x7c3410], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTERM: [libjvm.so+0x7c3410], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGQUIT: [libjvm.so+0x7c3410], sa_mask[0]=0x7ffbfeff, sa_flags=0x10000004
+SIGTRAP: SIG_DFL, sa_mask[0]=0x00000000, sa_flags=0x00000000
+
+
+---------------  S Y S T E M  ---------------
+
+OS:Ubuntu 14.04 (trusty)
+uname:Linux 3.13.0-32-generic #57-Ubuntu SMP Tue Jul 15 03:51:08 UTC 2014 x86_64
+libc:glibc 2.19 NPTL 2.19 
+rlimit: STACK 8192k, CORE 0k, NPROC 15846, NOFILE 8192, AS infinity
+load average:0.71 0.43 0.64
+
+/proc/meminfo:
+MemTotal:        2050060 kB
+MemFree:          168212 kB
+Buffers:            9252 kB
+Cached:           204588 kB
+SwapCached:        64280 kB
+Active:          1227512 kB
+Inactive:         485428 kB
+Active(anon):    1129184 kB
+Inactive(anon):   423100 kB
+Active(file):      98328 kB
+Inactive(file):    62328 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:       2094076 kB
+SwapFree:        1540168 kB
+Dirty:               236 kB
+Writeback:             0 kB
+AnonPages:       1459084 kB
+Mapped:           135476 kB
+Shmem:             53164 kB
+Slab:              60316 kB
+SReclaimable:      34272 kB
+SUnreclaim:        26044 kB
+KernelStack:        4328 kB
+PageTables:        48620 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:     3119104 kB
+Committed_AS:    6859148 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:        6100 kB
+VmallocChunk:   34359720563 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:    806912 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:       18368 kB
+DirectMap2M:     2078720 kB
+
+
+CPU:total 1 (1 cores per cpu, 1 threads per core) family 6 model 60 stepping 3, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, tsc
+
+/proc/cpuinfo:
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 60
+model name	: Intel(R) Core(TM) i5-4200M CPU @ 2.50GHz
+stepping	: 3
+microcode	: 0x19
+cpu MHz		: 2494.675
+cache size	: 6144 KB
+physical id	: 0
+siblings	: 1
+core id		: 0
+cpu cores	: 1
+apicid		: 0
+initial apicid	: 0
+fpu		: yes
+fpu_exception	: yes
+cpuid level	: 5
+wp		: yes
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 syscall nx rdtscp lm constant_tsc rep_good nopl pni monitor ssse3 lahf_lm
+bogomips	: 4989.35
+clflush size	: 64
+cache_alignment	: 64
+address sizes	: 39 bits physical, 48 bits virtual
+power management:
+
+
+
+Memory: 4k page, physical 2050060k(168212k free), swap 2094076k(1540168k free)
+
+vm_info: OpenJDK 64-Bit Server VM (24.75-b04) for linux-amd64 JRE (1.7.0_75-b13), built on Jan 27 2015 00:38:59 by "buildd" with gcc 4.8.2
+
+time: Tue Jun  9 05:01:47 2015
+elapsed time: 12 seconds
+

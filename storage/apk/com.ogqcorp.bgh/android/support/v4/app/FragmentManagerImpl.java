@@ -1,0 +1,1818 @@
+// 
+// Decompiled by Procyon v0.5.29
+// 
+
+package android.support.v4.app;
+
+import android.support.v4.c.c;
+import android.os.Handler;
+import android.view.View;
+import android.view.animation.Animation$AnimationListener;
+import android.view.ViewGroup;
+import android.app.Activity;
+import android.view.animation.AnimationUtils;
+import java.util.List;
+import android.os.Looper;
+import java.util.Arrays;
+import android.view.MenuInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.content.res.Configuration;
+import java.io.FileDescriptor;
+import java.io.Writer;
+import java.io.PrintWriter;
+import android.support.v4.c.d;
+import android.util.Log;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.content.Context;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.os.Build$VERSION;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.SparseArray;
+import java.util.ArrayList;
+import android.view.animation.Interpolator;
+
+final class FragmentManagerImpl extends FragmentManager
+{
+    static final Interpolator ACCELERATE_CUBIC;
+    static final Interpolator ACCELERATE_QUINT;
+    static final int ANIM_DUR = 220;
+    public static final int ANIM_STYLE_CLOSE_ENTER = 3;
+    public static final int ANIM_STYLE_CLOSE_EXIT = 4;
+    public static final int ANIM_STYLE_FADE_ENTER = 5;
+    public static final int ANIM_STYLE_FADE_EXIT = 6;
+    public static final int ANIM_STYLE_OPEN_ENTER = 1;
+    public static final int ANIM_STYLE_OPEN_EXIT = 2;
+    static boolean DEBUG = false;
+    static final Interpolator DECELERATE_CUBIC;
+    static final Interpolator DECELERATE_QUINT;
+    static final boolean HONEYCOMB = false;
+    static final String TAG = "FragmentManager";
+    static final String TARGET_REQUEST_CODE_STATE_TAG = "android:target_req_state";
+    static final String TARGET_STATE_TAG = "android:target_state";
+    static final String USER_VISIBLE_HINT_TAG = "android:user_visible_hint";
+    static final String VIEW_STATE_TAG = "android:view_state";
+    ArrayList<Fragment> mActive;
+    FragmentActivity mActivity;
+    ArrayList<Fragment> mAdded;
+    ArrayList<Integer> mAvailBackStackIndices;
+    ArrayList<Integer> mAvailIndices;
+    ArrayList<BackStackRecord> mBackStack;
+    ArrayList<FragmentManager$OnBackStackChangedListener> mBackStackChangeListeners;
+    ArrayList<BackStackRecord> mBackStackIndices;
+    FragmentContainer mContainer;
+    ArrayList<Fragment> mCreatedMenus;
+    int mCurState;
+    boolean mDestroyed;
+    Runnable mExecCommit;
+    boolean mExecutingActions;
+    boolean mHavePendingDeferredStart;
+    boolean mNeedMenuInvalidate;
+    String mNoTransactionsBecause;
+    Fragment mParent;
+    ArrayList<Runnable> mPendingActions;
+    SparseArray<Parcelable> mStateArray;
+    Bundle mStateBundle;
+    boolean mStateSaved;
+    Runnable[] mTmpActions;
+    
+    static {
+        FragmentManagerImpl.DEBUG = false;
+        final int sdk_INT = Build$VERSION.SDK_INT;
+        boolean honeycomb = false;
+        if (sdk_INT >= 11) {
+            honeycomb = true;
+        }
+        DECELERATE_QUINT = (Interpolator)new DecelerateInterpolator(2.5f);
+        DECELERATE_CUBIC = (Interpolator)new DecelerateInterpolator(1.5f);
+        ACCELERATE_QUINT = (Interpolator)new AccelerateInterpolator(2.5f);
+        ACCELERATE_CUBIC = (Interpolator)new AccelerateInterpolator(1.5f);
+    }
+    
+    FragmentManagerImpl() {
+        this.mCurState = 0;
+        this.mStateBundle = null;
+        this.mStateArray = null;
+        this.mExecCommit = new Runnable() {
+            @Override
+            public void run() {
+                FragmentManagerImpl.this.execPendingActions();
+            }
+        };
+    }
+    
+    private void checkStateLoss() {
+        if (this.mStateSaved) {
+            throw new IllegalStateException("Can not perform this action after onSaveInstanceState");
+        }
+        if (this.mNoTransactionsBecause != null) {
+            throw new IllegalStateException("Can not perform this action inside of " + this.mNoTransactionsBecause);
+        }
+    }
+    
+    static Animation makeFadeAnimation(final Context context, final float n, final float n2) {
+        final AlphaAnimation alphaAnimation = new AlphaAnimation(n, n2);
+        alphaAnimation.setInterpolator(FragmentManagerImpl.DECELERATE_CUBIC);
+        alphaAnimation.setDuration(220L);
+        return (Animation)alphaAnimation;
+    }
+    
+    static Animation makeOpenCloseAnimation(final Context context, final float n, final float n2, final float n3, final float n4) {
+        final AnimationSet set = new AnimationSet(false);
+        final ScaleAnimation scaleAnimation = new ScaleAnimation(n, n2, n, n2, 1, 0.5f, 1, 0.5f);
+        scaleAnimation.setInterpolator(FragmentManagerImpl.DECELERATE_QUINT);
+        scaleAnimation.setDuration(220L);
+        set.addAnimation((Animation)scaleAnimation);
+        final AlphaAnimation alphaAnimation = new AlphaAnimation(n3, n4);
+        alphaAnimation.setInterpolator(FragmentManagerImpl.DECELERATE_CUBIC);
+        alphaAnimation.setDuration(220L);
+        set.addAnimation((Animation)alphaAnimation);
+        return (Animation)set;
+    }
+    
+    public static int reverseTransit(final int n) {
+        switch (n) {
+            default: {
+                return 0;
+            }
+            case 4097: {
+                return 8194;
+            }
+            case 8194: {
+                return 4097;
+            }
+            case 4099: {
+                return 4099;
+            }
+        }
+    }
+    
+    private void throwException(final RuntimeException ex) {
+        Log.e("FragmentManager", ex.getMessage());
+        Log.e("FragmentManager", "Activity state:");
+        final PrintWriter printWriter = new PrintWriter(new d("FragmentManager"));
+        while (true) {
+            Label_0076: {
+                if (this.mActivity == null) {
+                    break Label_0076;
+                }
+                try {
+                    this.mActivity.dump("  ", null, printWriter, new String[0]);
+                    throw ex;
+                }
+                catch (Exception ex2) {
+                    Log.e("FragmentManager", "Failed dumping state", (Throwable)ex2);
+                    throw ex;
+                }
+                try {
+                    this.dump("  ", null, printWriter, new String[0]);
+                    continue;
+                }
+                catch (Exception ex3) {
+                    Log.e("FragmentManager", "Failed dumping state", (Throwable)ex3);
+                    continue;
+                }
+            }
+            continue;
+        }
+    }
+    
+    public static int transitToStyleIndex(final int n, final boolean b) {
+        switch (n) {
+            default: {
+                return -1;
+            }
+            case 4097: {
+                if (b) {
+                    return 1;
+                }
+                return 2;
+            }
+            case 8194: {
+                if (b) {
+                    return 3;
+                }
+                return 4;
+            }
+            case 4099: {
+                if (b) {
+                    return 5;
+                }
+                return 6;
+            }
+        }
+    }
+    
+    void addBackStackState(final BackStackRecord e) {
+        if (this.mBackStack == null) {
+            this.mBackStack = new ArrayList<BackStackRecord>();
+        }
+        this.mBackStack.add(e);
+        this.reportBackStackChanged();
+    }
+    
+    public void addFragment(final Fragment fragment, final boolean b) {
+        if (this.mAdded == null) {
+            this.mAdded = new ArrayList<Fragment>();
+        }
+        if (FragmentManagerImpl.DEBUG) {
+            Log.v("FragmentManager", "add: " + fragment);
+        }
+        this.makeActive(fragment);
+        if (!fragment.mDetached) {
+            if (this.mAdded.contains(fragment)) {
+                throw new IllegalStateException("Fragment already added: " + fragment);
+            }
+            this.mAdded.add(fragment);
+            fragment.mAdded = true;
+            fragment.mRemoving = false;
+            if (fragment.mHasMenu && fragment.mMenuVisible) {
+                this.mNeedMenuInvalidate = true;
+            }
+            if (b) {
+                this.moveToState(fragment);
+            }
+        }
+    }
+    
+    @Override
+    public void addOnBackStackChangedListener(final FragmentManager$OnBackStackChangedListener e) {
+        if (this.mBackStackChangeListeners == null) {
+            this.mBackStackChangeListeners = new ArrayList<FragmentManager$OnBackStackChangedListener>();
+        }
+        this.mBackStackChangeListeners.add(e);
+    }
+    
+    public int allocBackStackIndex(final BackStackRecord backStackRecord) {
+        synchronized (this) {
+            if (this.mAvailBackStackIndices == null || this.mAvailBackStackIndices.size() <= 0) {
+                if (this.mBackStackIndices == null) {
+                    this.mBackStackIndices = new ArrayList<BackStackRecord>();
+                }
+                final int size = this.mBackStackIndices.size();
+                if (FragmentManagerImpl.DEBUG) {
+                    Log.v("FragmentManager", "Setting back stack index " + size + " to " + backStackRecord);
+                }
+                this.mBackStackIndices.add(backStackRecord);
+                return size;
+            }
+            final int intValue = this.mAvailBackStackIndices.remove(-1 + this.mAvailBackStackIndices.size());
+            if (FragmentManagerImpl.DEBUG) {
+                Log.v("FragmentManager", "Adding back stack index " + intValue + " with " + backStackRecord);
+            }
+            this.mBackStackIndices.set(intValue, backStackRecord);
+            return intValue;
+        }
+    }
+    
+    public void attachActivity(final FragmentActivity mActivity, final FragmentContainer mContainer, final Fragment mParent) {
+        if (this.mActivity != null) {
+            throw new IllegalStateException("Already attached");
+        }
+        this.mActivity = mActivity;
+        this.mContainer = mContainer;
+        this.mParent = mParent;
+    }
+    
+    public void attachFragment(final Fragment e, final int n, final int n2) {
+        if (FragmentManagerImpl.DEBUG) {
+            Log.v("FragmentManager", "attach: " + e);
+        }
+        if (e.mDetached) {
+            e.mDetached = false;
+            if (!e.mAdded) {
+                if (this.mAdded == null) {
+                    this.mAdded = new ArrayList<Fragment>();
+                }
+                if (this.mAdded.contains(e)) {
+                    throw new IllegalStateException("Fragment already added: " + e);
+                }
+                if (FragmentManagerImpl.DEBUG) {
+                    Log.v("FragmentManager", "add from attach: " + e);
+                }
+                this.mAdded.add(e);
+                e.mAdded = true;
+                if (e.mHasMenu && e.mMenuVisible) {
+                    this.mNeedMenuInvalidate = true;
+                }
+                this.moveToState(e, this.mCurState, n, n2, false);
+            }
+        }
+    }
+    
+    @Override
+    public FragmentTransaction beginTransaction() {
+        return new BackStackRecord(this);
+    }
+    
+    public void detachFragment(final Fragment o, final int n, final int n2) {
+        if (FragmentManagerImpl.DEBUG) {
+            Log.v("FragmentManager", "detach: " + o);
+        }
+        if (!o.mDetached) {
+            o.mDetached = true;
+            if (o.mAdded) {
+                if (this.mAdded != null) {
+                    if (FragmentManagerImpl.DEBUG) {
+                        Log.v("FragmentManager", "remove from detach: " + o);
+                    }
+                    this.mAdded.remove(o);
+                }
+                if (o.mHasMenu && o.mMenuVisible) {
+                    this.mNeedMenuInvalidate = true;
+                }
+                this.moveToState(o, 1, n, n2, o.mAdded = false);
+            }
+        }
+    }
+    
+    public void dispatchActivityCreated() {
+        this.moveToState(2, this.mStateSaved = false);
+    }
+    
+    public void dispatchConfigurationChanged(final Configuration configuration) {
+        if (this.mAdded != null) {
+            for (int i = 0; i < this.mAdded.size(); ++i) {
+                final Fragment fragment = this.mAdded.get(i);
+                if (fragment != null) {
+                    fragment.performConfigurationChanged(configuration);
+                }
+            }
+        }
+    }
+    
+    public boolean dispatchContextItemSelected(final MenuItem menuItem) {
+        final ArrayList<Fragment> mAdded = this.mAdded;
+        boolean b = false;
+        if (mAdded != null) {
+            int index = 0;
+            while (true) {
+                final int size = this.mAdded.size();
+                b = false;
+                if (index >= size) {
+                    break;
+                }
+                final Fragment fragment = this.mAdded.get(index);
+                if (fragment != null && fragment.performContextItemSelected(menuItem)) {
+                    b = true;
+                    break;
+                }
+                ++index;
+            }
+        }
+        return b;
+    }
+    
+    public void dispatchCreate() {
+        this.moveToState(1, this.mStateSaved = false);
+    }
+    
+    public boolean dispatchCreateOptionsMenu(final Menu menu, final MenuInflater menuInflater) {
+        ArrayList<Fragment> mCreatedMenus = null;
+        boolean b;
+        if (this.mAdded != null) {
+            int i = 0;
+            b = false;
+            while (i < this.mAdded.size()) {
+                final Fragment e = this.mAdded.get(i);
+                if (e != null && e.performCreateOptionsMenu(menu, menuInflater)) {
+                    b = true;
+                    if (mCreatedMenus == null) {
+                        mCreatedMenus = new ArrayList<Fragment>();
+                    }
+                    mCreatedMenus.add(e);
+                }
+                final boolean b2 = b;
+                ++i;
+                b = b2;
+            }
+        }
+        else {
+            b = false;
+        }
+        final ArrayList<Fragment> mCreatedMenus2 = this.mCreatedMenus;
+        int j = 0;
+        if (mCreatedMenus2 != null) {
+            while (j < this.mCreatedMenus.size()) {
+                final Fragment o = this.mCreatedMenus.get(j);
+                if (mCreatedMenus == null || !mCreatedMenus.contains(o)) {
+                    o.onDestroyOptionsMenu();
+                }
+                ++j;
+            }
+        }
+        this.mCreatedMenus = mCreatedMenus;
+        return b;
+    }
+    
+    public void dispatchDestroy() {
+        this.mDestroyed = true;
+        this.execPendingActions();
+        this.moveToState(0, false);
+        this.mActivity = null;
+        this.mContainer = null;
+        this.mParent = null;
+    }
+    
+    public void dispatchDestroyView() {
+        this.moveToState(1, false);
+    }
+    
+    public void dispatchLowMemory() {
+        if (this.mAdded != null) {
+            for (int i = 0; i < this.mAdded.size(); ++i) {
+                final Fragment fragment = this.mAdded.get(i);
+                if (fragment != null) {
+                    fragment.performLowMemory();
+                }
+            }
+        }
+    }
+    
+    public boolean dispatchOptionsItemSelected(final MenuItem menuItem) {
+        final ArrayList<Fragment> mAdded = this.mAdded;
+        boolean b = false;
+        if (mAdded != null) {
+            int index = 0;
+            while (true) {
+                final int size = this.mAdded.size();
+                b = false;
+                if (index >= size) {
+                    break;
+                }
+                final Fragment fragment = this.mAdded.get(index);
+                if (fragment != null && fragment.performOptionsItemSelected(menuItem)) {
+                    b = true;
+                    break;
+                }
+                ++index;
+            }
+        }
+        return b;
+    }
+    
+    public void dispatchOptionsMenuClosed(final Menu menu) {
+        if (this.mAdded != null) {
+            for (int i = 0; i < this.mAdded.size(); ++i) {
+                final Fragment fragment = this.mAdded.get(i);
+                if (fragment != null) {
+                    fragment.performOptionsMenuClosed(menu);
+                }
+            }
+        }
+    }
+    
+    public void dispatchPause() {
+        this.moveToState(4, false);
+    }
+    
+    public boolean dispatchPrepareOptionsMenu(final Menu menu) {
+        boolean b;
+        if (this.mAdded != null) {
+            int i = 0;
+            b = false;
+            while (i < this.mAdded.size()) {
+                final Fragment fragment = this.mAdded.get(i);
+                if (fragment != null && fragment.performPrepareOptionsMenu(menu)) {
+                    b = true;
+                }
+                ++i;
+            }
+        }
+        else {
+            b = false;
+        }
+        return b;
+    }
+    
+    public void dispatchReallyStop() {
+        this.moveToState(2, false);
+    }
+    
+    public void dispatchResume() {
+        this.moveToState(5, this.mStateSaved = false);
+    }
+    
+    public void dispatchStart() {
+        this.moveToState(4, this.mStateSaved = false);
+    }
+    
+    public void dispatchStop() {
+        this.mStateSaved = true;
+        this.moveToState(3, false);
+    }
+    
+    @Override
+    public void dump(final String s, final FileDescriptor fileDescriptor, final PrintWriter printWriter, final String[] array) {
+        int i = 0;
+        final String string = s + "    ";
+        if (this.mActive != null) {
+            final int size = this.mActive.size();
+            if (size > 0) {
+                printWriter.print(s);
+                printWriter.print("Active Fragments in ");
+                printWriter.print(Integer.toHexString(System.identityHashCode(this)));
+                printWriter.println(":");
+                for (int j = 0; j < size; ++j) {
+                    final Fragment x = this.mActive.get(j);
+                    printWriter.print(s);
+                    printWriter.print("  #");
+                    printWriter.print(j);
+                    printWriter.print(": ");
+                    printWriter.println(x);
+                    if (x != null) {
+                        x.dump(string, fileDescriptor, printWriter, array);
+                    }
+                }
+            }
+        }
+        if (this.mAdded != null) {
+            final int size2 = this.mAdded.size();
+            if (size2 > 0) {
+                printWriter.print(s);
+                printWriter.println("Added Fragments:");
+                for (int k = 0; k < size2; ++k) {
+                    final Fragment fragment = this.mAdded.get(k);
+                    printWriter.print(s);
+                    printWriter.print("  #");
+                    printWriter.print(k);
+                    printWriter.print(": ");
+                    printWriter.println(fragment.toString());
+                }
+            }
+        }
+        if (this.mCreatedMenus != null) {
+            final int size3 = this.mCreatedMenus.size();
+            if (size3 > 0) {
+                printWriter.print(s);
+                printWriter.println("Fragments Created Menus:");
+                for (int l = 0; l < size3; ++l) {
+                    final Fragment fragment2 = this.mCreatedMenus.get(l);
+                    printWriter.print(s);
+                    printWriter.print("  #");
+                    printWriter.print(l);
+                    printWriter.print(": ");
+                    printWriter.println(fragment2.toString());
+                }
+            }
+        }
+        if (this.mBackStack != null) {
+            final int size4 = this.mBackStack.size();
+            if (size4 > 0) {
+                printWriter.print(s);
+                printWriter.println("Back Stack:");
+                for (int n = 0; n < size4; ++n) {
+                    final BackStackRecord backStackRecord = this.mBackStack.get(n);
+                    printWriter.print(s);
+                    printWriter.print("  #");
+                    printWriter.print(n);
+                    printWriter.print(": ");
+                    printWriter.println(backStackRecord.toString());
+                    backStackRecord.dump(string, fileDescriptor, printWriter, array);
+                }
+            }
+        }
+        synchronized (this) {
+            if (this.mBackStackIndices != null) {
+                final int size5 = this.mBackStackIndices.size();
+                if (size5 > 0) {
+                    printWriter.print(s);
+                    printWriter.println("Back Stack Indices:");
+                    for (int n2 = 0; n2 < size5; ++n2) {
+                        final BackStackRecord x2 = this.mBackStackIndices.get(n2);
+                        printWriter.print(s);
+                        printWriter.print("  #");
+                        printWriter.print(n2);
+                        printWriter.print(": ");
+                        printWriter.println(x2);
+                    }
+                }
+            }
+            if (this.mAvailBackStackIndices != null && this.mAvailBackStackIndices.size() > 0) {
+                printWriter.print(s);
+                printWriter.print("mAvailBackStackIndices: ");
+                printWriter.println(Arrays.toString(this.mAvailBackStackIndices.toArray()));
+            }
+            // monitorexit(this)
+            if (this.mPendingActions != null) {
+                final int size6 = this.mPendingActions.size();
+                if (size6 > 0) {
+                    printWriter.print(s);
+                    printWriter.println("Pending Actions:");
+                    while (i < size6) {
+                        final Runnable x3 = this.mPendingActions.get(i);
+                        printWriter.print(s);
+                        printWriter.print("  #");
+                        printWriter.print(i);
+                        printWriter.print(": ");
+                        printWriter.println(x3);
+                        ++i;
+                    }
+                }
+            }
+        }
+        printWriter.print(s);
+        printWriter.println("FragmentManager misc state:");
+        printWriter.print(s);
+        printWriter.print("  mActivity=");
+        printWriter.println(this.mActivity);
+        printWriter.print(s);
+        printWriter.print("  mContainer=");
+        printWriter.println(this.mContainer);
+        if (this.mParent != null) {
+            printWriter.print(s);
+            printWriter.print("  mParent=");
+            printWriter.println(this.mParent);
+        }
+        printWriter.print(s);
+        printWriter.print("  mCurState=");
+        printWriter.print(this.mCurState);
+        printWriter.print(" mStateSaved=");
+        printWriter.print(this.mStateSaved);
+        printWriter.print(" mDestroyed=");
+        printWriter.println(this.mDestroyed);
+        if (this.mNeedMenuInvalidate) {
+            printWriter.print(s);
+            printWriter.print("  mNeedMenuInvalidate=");
+            printWriter.println(this.mNeedMenuInvalidate);
+        }
+        if (this.mNoTransactionsBecause != null) {
+            printWriter.print(s);
+            printWriter.print("  mNoTransactionsBecause=");
+            printWriter.println(this.mNoTransactionsBecause);
+        }
+        if (this.mAvailIndices != null && this.mAvailIndices.size() > 0) {
+            printWriter.print(s);
+            printWriter.print("  mAvailIndices: ");
+            printWriter.println(Arrays.toString(this.mAvailIndices.toArray()));
+        }
+    }
+    
+    public void enqueueAction(final Runnable e, final boolean b) {
+        if (!b) {
+            this.checkStateLoss();
+        }
+        synchronized (this) {
+            if (this.mDestroyed || this.mActivity == null) {
+                throw new IllegalStateException("Activity has been destroyed");
+            }
+        }
+        if (this.mPendingActions == null) {
+            this.mPendingActions = new ArrayList<Runnable>();
+        }
+        this.mPendingActions.add(e);
+        if (this.mPendingActions.size() == 1) {
+            this.mActivity.mHandler.removeCallbacks(this.mExecCommit);
+            this.mActivity.mHandler.post(this.mExecCommit);
+        }
+    }
+    // monitorexit(this)
+    
+    public boolean execPendingActions() {
+        if (this.mExecutingActions) {
+            throw new IllegalStateException("Recursive entry to executePendingTransactions");
+        }
+        if (Looper.myLooper() != this.mActivity.mHandler.getLooper()) {
+            throw new IllegalStateException("Must be called from main thread of process");
+        }
+        boolean b = false;
+        while (true) {
+            boolean b2 = false;
+            Label_0262: {
+                synchronized (this) {
+                    if (this.mPendingActions == null || this.mPendingActions.size() == 0) {
+                        // monitorexit(this)
+                        if (this.mHavePendingDeferredStart) {
+                            int i = 0;
+                            b2 = false;
+                            while (i < this.mActive.size()) {
+                                final Fragment fragment = this.mActive.get(i);
+                                if (fragment != null && fragment.mLoaderManager != null) {
+                                    b2 |= fragment.mLoaderManager.hasRunningLoaders();
+                                }
+                                ++i;
+                            }
+                            break Label_0262;
+                        }
+                        break;
+                    }
+                    else {
+                        final int size = this.mPendingActions.size();
+                        if (this.mTmpActions == null || this.mTmpActions.length < size) {
+                            this.mTmpActions = new Runnable[size];
+                        }
+                        this.mPendingActions.toArray(this.mTmpActions);
+                        this.mPendingActions.clear();
+                        this.mActivity.mHandler.removeCallbacks(this.mExecCommit);
+                        // monitorexit(this)
+                        this.mExecutingActions = true;
+                        for (int j = 0; j < size; ++j) {
+                            this.mTmpActions[j].run();
+                            this.mTmpActions[j] = null;
+                        }
+                    }
+                }
+                this.mExecutingActions = false;
+                b = true;
+                continue;
+            }
+            if (!b2) {
+                this.mHavePendingDeferredStart = false;
+                this.startPendingDeferredFragments();
+                break;
+            }
+            break;
+        }
+        return b;
+    }
+    
+    @Override
+    public boolean executePendingTransactions() {
+        return this.execPendingActions();
+    }
+    
+    @Override
+    public Fragment findFragmentById(final int n) {
+        if (this.mAdded != null) {
+            for (int i = -1 + this.mAdded.size(); i >= 0; --i) {
+                final Fragment fragment = this.mAdded.get(i);
+                if (fragment != null && fragment.mFragmentId == n) {
+                    return fragment;
+                }
+            }
+        }
+        Label_0056: {
+            break Label_0056;
+        }
+        if (this.mActive != null) {
+            for (int j = -1 + this.mActive.size(); j >= 0; --j) {
+                final Fragment fragment = this.mActive.get(j);
+                if (fragment != null && fragment.mFragmentId == n) {
+                    return fragment;
+                }
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public Fragment findFragmentByTag(final String s) {
+        if (this.mAdded != null && s != null) {
+            for (int i = -1 + this.mAdded.size(); i >= 0; --i) {
+                final Fragment fragment = this.mAdded.get(i);
+                if (fragment != null && s.equals(fragment.mTag)) {
+                    return fragment;
+                }
+            }
+        }
+        Label_0063: {
+            break Label_0063;
+        }
+        if (this.mActive != null && s != null) {
+            for (int j = -1 + this.mActive.size(); j >= 0; --j) {
+                final Fragment fragment = this.mActive.get(j);
+                if (fragment != null && s.equals(fragment.mTag)) {
+                    return fragment;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public Fragment findFragmentByWho(final String s) {
+        if (this.mActive != null && s != null) {
+            for (int i = -1 + this.mActive.size(); i >= 0; --i) {
+                final Fragment fragment = this.mActive.get(i);
+                if (fragment != null) {
+                    final Fragment fragmentByWho = fragment.findFragmentByWho(s);
+                    if (fragmentByWho != null) {
+                        return fragmentByWho;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    public void freeBackStackIndex(final int i) {
+        synchronized (this) {
+            this.mBackStackIndices.set(i, null);
+            if (this.mAvailBackStackIndices == null) {
+                this.mAvailBackStackIndices = new ArrayList<Integer>();
+            }
+            if (FragmentManagerImpl.DEBUG) {
+                Log.v("FragmentManager", "Freeing back stack index " + i);
+            }
+            this.mAvailBackStackIndices.add(i);
+        }
+    }
+    
+    @Override
+    public FragmentManager$BackStackEntry getBackStackEntryAt(final int index) {
+        return this.mBackStack.get(index);
+    }
+    
+    @Override
+    public int getBackStackEntryCount() {
+        if (this.mBackStack != null) {
+            return this.mBackStack.size();
+        }
+        return 0;
+    }
+    
+    @Override
+    public Fragment getFragment(final Bundle bundle, final String s) {
+        final int int1 = bundle.getInt(s, -1);
+        Fragment fragment;
+        if (int1 == -1) {
+            fragment = null;
+        }
+        else {
+            if (int1 >= this.mActive.size()) {
+                this.throwException(new IllegalStateException("Fragement no longer exists for key " + s + ": index " + int1));
+            }
+            fragment = this.mActive.get(int1);
+            if (fragment == null) {
+                this.throwException(new IllegalStateException("Fragement no longer exists for key " + s + ": index " + int1));
+                return fragment;
+            }
+        }
+        return fragment;
+    }
+    
+    @Override
+    public List<Fragment> getFragments() {
+        return this.mActive;
+    }
+    
+    public void hideFragment(final Fragment obj, final int n, final int n2) {
+        if (FragmentManagerImpl.DEBUG) {
+            Log.v("FragmentManager", "hide: " + obj);
+        }
+        if (!obj.mHidden) {
+            obj.mHidden = true;
+            if (obj.mView != null) {
+                final Animation loadAnimation = this.loadAnimation(obj, n, false, n2);
+                if (loadAnimation != null) {
+                    obj.mView.startAnimation(loadAnimation);
+                }
+                obj.mView.setVisibility(8);
+            }
+            if (obj.mAdded && obj.mHasMenu && obj.mMenuVisible) {
+                this.mNeedMenuInvalidate = true;
+            }
+            obj.onHiddenChanged(true);
+        }
+    }
+    
+    @Override
+    public boolean isDestroyed() {
+        return this.mDestroyed;
+    }
+    
+    Animation loadAnimation(final Fragment fragment, final int n, final boolean b, int windowAnimations) {
+        Animation animation = fragment.onCreateAnimation(n, b, fragment.mNextAnim);
+        if (animation == null) {
+            if (fragment.mNextAnim != 0) {
+                animation = AnimationUtils.loadAnimation((Context)this.mActivity, fragment.mNextAnim);
+                if (animation != null) {
+                    return animation;
+                }
+            }
+            if (n == 0) {
+                return null;
+            }
+            final int transitToStyleIndex = transitToStyleIndex(n, b);
+            if (transitToStyleIndex < 0) {
+                return null;
+            }
+            switch (transitToStyleIndex) {
+                default: {
+                    if (windowAnimations == 0 && this.mActivity.getWindow() != null) {
+                        windowAnimations = this.mActivity.getWindow().getAttributes().windowAnimations;
+                    }
+                    if (windowAnimations == 0) {
+                        return null;
+                    }
+                    return null;
+                }
+                case 1: {
+                    return makeOpenCloseAnimation((Context)this.mActivity, 1.125f, 1.0f, 0.0f, 1.0f);
+                }
+                case 2: {
+                    return makeOpenCloseAnimation((Context)this.mActivity, 1.0f, 0.975f, 1.0f, 0.0f);
+                }
+                case 3: {
+                    return makeOpenCloseAnimation((Context)this.mActivity, 0.975f, 1.0f, 0.0f, 1.0f);
+                }
+                case 4: {
+                    return makeOpenCloseAnimation((Context)this.mActivity, 1.0f, 1.075f, 1.0f, 0.0f);
+                }
+                case 5: {
+                    return makeFadeAnimation((Context)this.mActivity, 0.0f, 1.0f);
+                }
+                case 6: {
+                    return makeFadeAnimation((Context)this.mActivity, 1.0f, 0.0f);
+                }
+            }
+        }
+        return animation;
+    }
+    
+    void makeActive(final Fragment obj) {
+        if (obj.mIndex < 0) {
+            if (this.mAvailIndices == null || this.mAvailIndices.size() <= 0) {
+                if (this.mActive == null) {
+                    this.mActive = new ArrayList<Fragment>();
+                }
+                obj.setIndex(this.mActive.size(), this.mParent);
+                this.mActive.add(obj);
+            }
+            else {
+                obj.setIndex(this.mAvailIndices.remove(-1 + this.mAvailIndices.size()), this.mParent);
+                this.mActive.set(obj.mIndex, obj);
+            }
+            if (FragmentManagerImpl.DEBUG) {
+                Log.v("FragmentManager", "Allocated fragment index " + obj);
+            }
+        }
+    }
+    
+    void makeInactive(final Fragment obj) {
+        if (obj.mIndex < 0) {
+            return;
+        }
+        if (FragmentManagerImpl.DEBUG) {
+            Log.v("FragmentManager", "Freeing fragment index " + obj);
+        }
+        this.mActive.set(obj.mIndex, null);
+        if (this.mAvailIndices == null) {
+            this.mAvailIndices = new ArrayList<Integer>();
+        }
+        this.mAvailIndices.add(obj.mIndex);
+        this.mActivity.invalidateSupportFragment(obj.mWho);
+        obj.initState();
+    }
+    
+    void moveToState(final int mCurState, final int n, final int n2, final boolean b) {
+        if (this.mActivity == null && mCurState != 0) {
+            throw new IllegalStateException("No activity");
+        }
+        if (b || this.mCurState != mCurState) {
+            this.mCurState = mCurState;
+            if (this.mActive != null) {
+                int i = 0;
+                boolean b2 = false;
+            Label_0116_Outer:
+                while (i < this.mActive.size()) {
+                    final Fragment fragment = this.mActive.get(i);
+                    while (true) {
+                        Label_0170: {
+                            if (fragment == null) {
+                                break Label_0170;
+                            }
+                            this.moveToState(fragment, mCurState, n, n2, false);
+                            if (fragment.mLoaderManager == null) {
+                                break Label_0170;
+                            }
+                            final boolean b3 = b2 | fragment.mLoaderManager.hasRunningLoaders();
+                            ++i;
+                            b2 = b3;
+                            continue Label_0116_Outer;
+                        }
+                        final boolean b3 = b2;
+                        continue;
+                    }
+                }
+                if (!b2) {
+                    this.startPendingDeferredFragments();
+                }
+                if (this.mNeedMenuInvalidate && this.mActivity != null && this.mCurState == 5) {
+                    this.mActivity.supportInvalidateOptionsMenu();
+                    this.mNeedMenuInvalidate = false;
+                }
+            }
+        }
+    }
+    
+    void moveToState(final int n, final boolean b) {
+        this.moveToState(n, 0, 0, b);
+    }
+    
+    void moveToState(final Fragment fragment) {
+        this.moveToState(fragment, this.mCurState, 0, 0, false);
+    }
+    
+    void moveToState(final Fragment fragment, int mState, final int n, final int n2, final boolean b) {
+        if ((!fragment.mAdded || fragment.mDetached) && mState > 1) {
+            mState = 1;
+        }
+        if (fragment.mRemoving && mState > fragment.mState) {
+            mState = fragment.mState;
+        }
+        if (fragment.mDeferStart && fragment.mState < 4 && mState > 3) {
+            mState = 3;
+        }
+        if (fragment.mState < mState) {
+            if (fragment.mFromLayout && !fragment.mInLayout) {
+                return;
+            }
+            if (fragment.mAnimatingAway != null) {
+                fragment.mAnimatingAway = null;
+                this.moveToState(fragment, fragment.mStateAfterAnimating, 0, 0, true);
+            }
+            Label_0495: {
+                switch (fragment.mState) {
+                    case 0: {
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "moveto CREATED: " + fragment);
+                        }
+                        if (fragment.mSavedFragmentState != null) {
+                            fragment.mSavedViewState = (SparseArray<Parcelable>)fragment.mSavedFragmentState.getSparseParcelableArray("android:view_state");
+                            fragment.mTarget = this.getFragment(fragment.mSavedFragmentState, "android:target_state");
+                            if (fragment.mTarget != null) {
+                                fragment.mTargetRequestCode = fragment.mSavedFragmentState.getInt("android:target_req_state", 0);
+                            }
+                            if (!(fragment.mUserVisibleHint = fragment.mSavedFragmentState.getBoolean("android:user_visible_hint", true))) {
+                                fragment.mDeferStart = true;
+                                if (mState > 3) {
+                                    mState = 3;
+                                }
+                            }
+                        }
+                        fragment.mActivity = this.mActivity;
+                        fragment.mParentFragment = this.mParent;
+                        FragmentManagerImpl mFragmentManager;
+                        if (this.mParent != null) {
+                            mFragmentManager = this.mParent.mChildFragmentManager;
+                        }
+                        else {
+                            mFragmentManager = this.mActivity.mFragments;
+                        }
+                        fragment.mFragmentManager = mFragmentManager;
+                        fragment.mCalled = false;
+                        fragment.onAttach(this.mActivity);
+                        if (!fragment.mCalled) {
+                            throw new SuperNotCalledException("Fragment " + fragment + " did not call through to super.onAttach()");
+                        }
+                        if (fragment.mParentFragment == null) {
+                            this.mActivity.onAttachFragment(fragment);
+                        }
+                        if (!fragment.mRetaining) {
+                            fragment.performCreate(fragment.mSavedFragmentState);
+                        }
+                        fragment.mRetaining = false;
+                        if (!fragment.mFromLayout) {
+                            break Label_0495;
+                        }
+                        fragment.mView = fragment.performCreateView(fragment.getLayoutInflater(fragment.mSavedFragmentState), null, fragment.mSavedFragmentState);
+                        if (fragment.mView != null) {
+                            fragment.mInnerView = fragment.mView;
+                            fragment.mView = (View)NoSaveStateFrameLayout.wrap(fragment.mView);
+                            if (fragment.mHidden) {
+                                fragment.mView.setVisibility(8);
+                            }
+                            fragment.onViewCreated(fragment.mView, fragment.mSavedFragmentState);
+                            break Label_0495;
+                        }
+                        fragment.mInnerView = null;
+                        break Label_0495;
+                    }
+                    case 1: {
+                        if (mState > 1) {
+                            if (FragmentManagerImpl.DEBUG) {
+                                Log.v("FragmentManager", "moveto ACTIVITY_CREATED: " + fragment);
+                            }
+                            if (!fragment.mFromLayout) {
+                                ViewGroup mContainer;
+                                if (fragment.mContainerId != 0) {
+                                    mContainer = (ViewGroup)this.mContainer.findViewById(fragment.mContainerId);
+                                    if (mContainer == null && !fragment.mRestored) {
+                                        this.throwException(new IllegalArgumentException("No view found for id 0x" + Integer.toHexString(fragment.mContainerId) + " (" + fragment.getResources().getResourceName(fragment.mContainerId) + ") for fragment " + fragment));
+                                    }
+                                }
+                                else {
+                                    mContainer = null;
+                                }
+                                fragment.mContainer = mContainer;
+                                fragment.mView = fragment.performCreateView(fragment.getLayoutInflater(fragment.mSavedFragmentState), mContainer, fragment.mSavedFragmentState);
+                                if (fragment.mView != null) {
+                                    fragment.mInnerView = fragment.mView;
+                                    fragment.mView = (View)NoSaveStateFrameLayout.wrap(fragment.mView);
+                                    if (mContainer != null) {
+                                        final Animation loadAnimation = this.loadAnimation(fragment, n, true, n2);
+                                        if (loadAnimation != null) {
+                                            fragment.mView.startAnimation(loadAnimation);
+                                        }
+                                        mContainer.addView(fragment.mView);
+                                    }
+                                    if (fragment.mHidden) {
+                                        fragment.mView.setVisibility(8);
+                                    }
+                                    fragment.onViewCreated(fragment.mView, fragment.mSavedFragmentState);
+                                }
+                                else {
+                                    fragment.mInnerView = null;
+                                }
+                            }
+                            fragment.performActivityCreated(fragment.mSavedFragmentState);
+                            if (fragment.mView != null) {
+                                fragment.restoreViewState(fragment.mSavedFragmentState);
+                            }
+                            fragment.mSavedFragmentState = null;
+                        }
+                    }
+                    case 2:
+                    case 3: {
+                        if (mState > 3) {
+                            if (FragmentManagerImpl.DEBUG) {
+                                Log.v("FragmentManager", "moveto STARTED: " + fragment);
+                            }
+                            fragment.performStart();
+                        }
+                    }
+                    case 4: {
+                        if (mState > 4) {
+                            if (FragmentManagerImpl.DEBUG) {
+                                Log.v("FragmentManager", "moveto RESUMED: " + fragment);
+                            }
+                            fragment.mResumed = true;
+                            fragment.performResume();
+                            fragment.mSavedFragmentState = null;
+                            fragment.mSavedViewState = null;
+                            break;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        else if (fragment.mState > mState) {
+            switch (fragment.mState) {
+                case 3: {
+                    if (mState < 3) {
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "movefrom STOPPED: " + fragment);
+                        }
+                        fragment.performReallyStop();
+                    }
+                }
+                case 2: {
+                    if (mState < 2) {
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "movefrom ACTIVITY_CREATED: " + fragment);
+                        }
+                        if (fragment.mView != null && !this.mActivity.isFinishing() && fragment.mSavedViewState == null) {
+                            this.saveFragmentViewState(fragment);
+                        }
+                        fragment.performDestroyView();
+                        if (fragment.mView != null && fragment.mContainer != null) {
+                            Animation loadAnimation2;
+                            if (this.mCurState > 0 && !this.mDestroyed) {
+                                loadAnimation2 = this.loadAnimation(fragment, n, false, n2);
+                            }
+                            else {
+                                loadAnimation2 = null;
+                            }
+                            if (loadAnimation2 != null) {
+                                fragment.mAnimatingAway = fragment.mView;
+                                fragment.mStateAfterAnimating = mState;
+                                loadAnimation2.setAnimationListener((Animation$AnimationListener)new Animation$AnimationListener() {
+                                    public void onAnimationEnd(final Animation animation) {
+                                        if (fragment.mAnimatingAway != null) {
+                                            fragment.mAnimatingAway = null;
+                                            FragmentManagerImpl.this.moveToState(fragment, fragment.mStateAfterAnimating, 0, 0, false);
+                                        }
+                                    }
+                                    
+                                    public void onAnimationRepeat(final Animation animation) {
+                                    }
+                                    
+                                    public void onAnimationStart(final Animation animation) {
+                                    }
+                                });
+                                fragment.mView.startAnimation(loadAnimation2);
+                            }
+                            fragment.mContainer.removeView(fragment.mView);
+                        }
+                        fragment.mContainer = null;
+                        fragment.mView = null;
+                        fragment.mInnerView = null;
+                    }
+                }
+                case 1: {
+                    if (mState >= 1) {
+                        break;
+                    }
+                    if (this.mDestroyed && fragment.mAnimatingAway != null) {
+                        final View mAnimatingAway = fragment.mAnimatingAway;
+                        fragment.mAnimatingAway = null;
+                        mAnimatingAway.clearAnimation();
+                    }
+                    if (fragment.mAnimatingAway != null) {
+                        fragment.mStateAfterAnimating = mState;
+                        mState = 1;
+                        break;
+                    }
+                    if (FragmentManagerImpl.DEBUG) {
+                        Log.v("FragmentManager", "movefrom CREATED: " + fragment);
+                    }
+                    if (!fragment.mRetaining) {
+                        fragment.performDestroy();
+                    }
+                    fragment.mCalled = false;
+                    fragment.onDetach();
+                    if (!fragment.mCalled) {
+                        throw new SuperNotCalledException("Fragment " + fragment + " did not call through to super.onDetach()");
+                    }
+                    if (b) {
+                        break;
+                    }
+                    if (!fragment.mRetaining) {
+                        this.makeInactive(fragment);
+                        break;
+                    }
+                    fragment.mActivity = null;
+                    fragment.mFragmentManager = null;
+                    break;
+                }
+                case 5: {
+                    if (mState < 5) {
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "movefrom RESUMED: " + fragment);
+                        }
+                        fragment.performPause();
+                        fragment.mResumed = false;
+                    }
+                }
+                case 4: {
+                    if (mState < 4) {
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "movefrom STARTED: " + fragment);
+                        }
+                        fragment.performStop();
+                    }
+                }
+            }
+        }
+        fragment.mState = mState;
+    }
+    
+    public void noteStateNotSaved() {
+        this.mStateSaved = false;
+    }
+    
+    public void performPendingDeferredStart(final Fragment fragment) {
+        if (fragment.mDeferStart) {
+            if (!this.mExecutingActions) {
+                fragment.mDeferStart = false;
+                this.moveToState(fragment, this.mCurState, 0, 0, false);
+                return;
+            }
+            this.mHavePendingDeferredStart = true;
+        }
+    }
+    
+    @Override
+    public void popBackStack() {
+        this.enqueueAction(new Runnable() {
+            @Override
+            public void run() {
+                FragmentManagerImpl.this.popBackStackState(FragmentManagerImpl.this.mActivity.mHandler, null, -1, 0);
+            }
+        }, false);
+    }
+    
+    @Override
+    public void popBackStack(final int i, final int n) {
+        if (i < 0) {
+            throw new IllegalArgumentException("Bad id: " + i);
+        }
+        this.enqueueAction(new Runnable() {
+            @Override
+            public void run() {
+                FragmentManagerImpl.this.popBackStackState(FragmentManagerImpl.this.mActivity.mHandler, null, i, n);
+            }
+        }, false);
+    }
+    
+    @Override
+    public void popBackStack(final String s, final int n) {
+        this.enqueueAction(new Runnable() {
+            @Override
+            public void run() {
+                FragmentManagerImpl.this.popBackStackState(FragmentManagerImpl.this.mActivity.mHandler, s, -1, n);
+            }
+        }, false);
+    }
+    
+    @Override
+    public boolean popBackStackImmediate() {
+        this.checkStateLoss();
+        this.executePendingTransactions();
+        return this.popBackStackState(this.mActivity.mHandler, null, -1, 0);
+    }
+    
+    @Override
+    public boolean popBackStackImmediate(final int i, final int n) {
+        this.checkStateLoss();
+        this.executePendingTransactions();
+        if (i < 0) {
+            throw new IllegalArgumentException("Bad id: " + i);
+        }
+        return this.popBackStackState(this.mActivity.mHandler, null, i, n);
+    }
+    
+    @Override
+    public boolean popBackStackImmediate(final String s, final int n) {
+        this.checkStateLoss();
+        this.executePendingTransactions();
+        return this.popBackStackState(this.mActivity.mHandler, s, -1, n);
+    }
+    
+    boolean popBackStackState(final Handler handler, final String s, final int n, final int n2) {
+        if (this.mBackStack != null) {
+            if (s == null && n < 0 && (n2 & 0x1) == 0x0) {
+                final int index = -1 + this.mBackStack.size();
+                if (index < 0) {
+                    return false;
+                }
+                this.mBackStack.remove(index).popFromBackStack(true);
+                this.reportBackStackChanged();
+            }
+            else {
+                int n3 = -1;
+                if (s != null || n >= 0) {
+                    int i;
+                    for (i = -1 + this.mBackStack.size(); i >= 0; --i) {
+                        final BackStackRecord backStackRecord = this.mBackStack.get(i);
+                        if ((s != null && s.equals(backStackRecord.getName())) || (n >= 0 && n == backStackRecord.mIndex)) {
+                            break;
+                        }
+                    }
+                    if (i < 0) {
+                        return false;
+                    }
+                    if ((n2 & 0x1) != 0x0) {
+                        --i;
+                        while (i >= 0) {
+                            final BackStackRecord backStackRecord2 = this.mBackStack.get(i);
+                            if ((s == null || !s.equals(backStackRecord2.getName())) && (n < 0 || n != backStackRecord2.mIndex)) {
+                                break;
+                            }
+                            --i;
+                        }
+                    }
+                    n3 = i;
+                }
+                if (n3 == -1 + this.mBackStack.size()) {
+                    return false;
+                }
+                final ArrayList<BackStackRecord> list = new ArrayList<BackStackRecord>();
+                for (int j = -1 + this.mBackStack.size(); j > n3; --j) {
+                    list.add(this.mBackStack.remove(j));
+                }
+                for (int n4 = -1 + list.size(), k = 0; k <= n4; ++k) {
+                    if (FragmentManagerImpl.DEBUG) {
+                        Log.v("FragmentManager", "Popping back stack state: " + list.get(k));
+                    }
+                    list.get(k).popFromBackStack(k == n4);
+                }
+                this.reportBackStackChanged();
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public void putFragment(final Bundle bundle, final String s, final Fragment obj) {
+        if (obj.mIndex < 0) {
+            this.throwException(new IllegalStateException("Fragment " + obj + " is not currently in the FragmentManager"));
+        }
+        bundle.putInt(s, obj.mIndex);
+    }
+    
+    public void removeFragment(final Fragment fragment, final int n, final int n2) {
+        if (FragmentManagerImpl.DEBUG) {
+            Log.v("FragmentManager", "remove: " + fragment + " nesting=" + fragment.mBackStackNesting);
+        }
+        boolean b;
+        if (!fragment.isInBackStack()) {
+            b = true;
+        }
+        else {
+            b = false;
+        }
+        if (!fragment.mDetached || b) {
+            if (this.mAdded != null) {
+                this.mAdded.remove(fragment);
+            }
+            if (fragment.mHasMenu && fragment.mMenuVisible) {
+                this.mNeedMenuInvalidate = true;
+            }
+            fragment.mAdded = false;
+            fragment.mRemoving = true;
+            int n3;
+            if (b) {
+                n3 = 0;
+            }
+            else {
+                n3 = 1;
+            }
+            this.moveToState(fragment, n3, n, n2, false);
+        }
+    }
+    
+    @Override
+    public void removeOnBackStackChangedListener(final FragmentManager$OnBackStackChangedListener o) {
+        if (this.mBackStackChangeListeners != null) {
+            this.mBackStackChangeListeners.remove(o);
+        }
+    }
+    
+    void reportBackStackChanged() {
+        if (this.mBackStackChangeListeners != null) {
+            for (int i = 0; i < this.mBackStackChangeListeners.size(); ++i) {
+                this.mBackStackChangeListeners.get(i).onBackStackChanged();
+            }
+        }
+    }
+    
+    void restoreAllState(final Parcelable parcelable, final ArrayList<Fragment> list) {
+        if (parcelable != null) {
+            final FragmentManagerState fragmentManagerState = (FragmentManagerState)parcelable;
+            if (fragmentManagerState.mActive != null) {
+                if (list != null) {
+                    for (int i = 0; i < list.size(); ++i) {
+                        final Fragment fragment = list.get(i);
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "restoreAllState: re-attaching retained " + fragment);
+                        }
+                        final FragmentState fragmentState = fragmentManagerState.mActive[fragment.mIndex];
+                        fragmentState.mInstance = fragment;
+                        fragment.mSavedViewState = null;
+                        fragment.mBackStackNesting = 0;
+                        fragment.mInLayout = false;
+                        fragment.mAdded = false;
+                        fragment.mTarget = null;
+                        if (fragmentState.mSavedFragmentState != null) {
+                            fragmentState.mSavedFragmentState.setClassLoader(this.mActivity.getClassLoader());
+                            fragment.mSavedViewState = (SparseArray<Parcelable>)fragmentState.mSavedFragmentState.getSparseParcelableArray("android:view_state");
+                        }
+                    }
+                }
+                this.mActive = new ArrayList<Fragment>(fragmentManagerState.mActive.length);
+                if (this.mAvailIndices != null) {
+                    this.mAvailIndices.clear();
+                }
+                for (int j = 0; j < fragmentManagerState.mActive.length; ++j) {
+                    final FragmentState fragmentState2 = fragmentManagerState.mActive[j];
+                    if (fragmentState2 != null) {
+                        final Fragment instantiate = fragmentState2.instantiate(this.mActivity, this.mParent);
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "restoreAllState: active #" + j + ": " + instantiate);
+                        }
+                        this.mActive.add(instantiate);
+                        fragmentState2.mInstance = null;
+                    }
+                    else {
+                        this.mActive.add(null);
+                        if (this.mAvailIndices == null) {
+                            this.mAvailIndices = new ArrayList<Integer>();
+                        }
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "restoreAllState: avail #" + j);
+                        }
+                        this.mAvailIndices.add(j);
+                    }
+                }
+                if (list != null) {
+                    for (int k = 0; k < list.size(); ++k) {
+                        final Fragment obj = list.get(k);
+                        if (obj.mTargetIndex >= 0) {
+                            if (obj.mTargetIndex < this.mActive.size()) {
+                                obj.mTarget = this.mActive.get(obj.mTargetIndex);
+                            }
+                            else {
+                                Log.w("FragmentManager", "Re-attaching retained fragment " + obj + " target no longer exists: " + obj.mTargetIndex);
+                                obj.mTarget = null;
+                            }
+                        }
+                    }
+                }
+                if (fragmentManagerState.mAdded != null) {
+                    this.mAdded = new ArrayList<Fragment>(fragmentManagerState.mAdded.length);
+                    for (int l = 0; l < fragmentManagerState.mAdded.length; ++l) {
+                        final Fragment e = this.mActive.get(fragmentManagerState.mAdded[l]);
+                        if (e == null) {
+                            this.throwException(new IllegalStateException("No instantiated fragment for index #" + fragmentManagerState.mAdded[l]));
+                        }
+                        e.mAdded = true;
+                        if (FragmentManagerImpl.DEBUG) {
+                            Log.v("FragmentManager", "restoreAllState: added #" + l + ": " + e);
+                        }
+                        if (this.mAdded.contains(e)) {
+                            throw new IllegalStateException("Already added!");
+                        }
+                        this.mAdded.add(e);
+                    }
+                }
+                else {
+                    this.mAdded = null;
+                }
+                if (fragmentManagerState.mBackStack == null) {
+                    this.mBackStack = null;
+                    return;
+                }
+                this.mBackStack = new ArrayList<BackStackRecord>(fragmentManagerState.mBackStack.length);
+                for (int m = 0; m < fragmentManagerState.mBackStack.length; ++m) {
+                    final BackStackRecord instantiate2 = fragmentManagerState.mBackStack[m].instantiate(this);
+                    if (FragmentManagerImpl.DEBUG) {
+                        Log.v("FragmentManager", "restoreAllState: back stack #" + m + " (index " + instantiate2.mIndex + "): " + instantiate2);
+                        instantiate2.dump("  ", new PrintWriter(new d("FragmentManager")), false);
+                    }
+                    this.mBackStack.add(instantiate2);
+                    if (instantiate2.mIndex >= 0) {
+                        this.setBackStackIndex(instantiate2.mIndex, instantiate2);
+                    }
+                }
+            }
+        }
+    }
+    
+    ArrayList<Fragment> retainNonConfig() {
+        final ArrayList<Fragment> mActive = this.mActive;
+        ArrayList<Fragment> list = null;
+        if (mActive != null) {
+            for (int i = 0; i < this.mActive.size(); ++i) {
+                final Fragment fragment = this.mActive.get(i);
+                if (fragment != null && fragment.mRetainInstance) {
+                    if (list == null) {
+                        list = new ArrayList<Fragment>();
+                    }
+                    list.add(fragment);
+                    fragment.mRetaining = true;
+                    int mIndex;
+                    if (fragment.mTarget != null) {
+                        mIndex = fragment.mTarget.mIndex;
+                    }
+                    else {
+                        mIndex = -1;
+                    }
+                    fragment.mTargetIndex = mIndex;
+                    if (FragmentManagerImpl.DEBUG) {
+                        Log.v("FragmentManager", "retainNonConfig: keeping retained " + fragment);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+    
+    Parcelable saveAllState() {
+        this.execPendingActions();
+        if (FragmentManagerImpl.HONEYCOMB) {
+            this.mStateSaved = true;
+        }
+        if (this.mActive != null && this.mActive.size() > 0) {
+            final int size = this.mActive.size();
+            final FragmentState[] mActive = new FragmentState[size];
+            int i = 0;
+            int n = 0;
+            while (i < size) {
+                final Fragment obj = this.mActive.get(i);
+                int n2;
+                if (obj != null) {
+                    if (obj.mIndex < 0) {
+                        this.throwException(new IllegalStateException("Failure saving state: active " + obj + " has cleared index: " + obj.mIndex));
+                    }
+                    final FragmentState fragmentState = new FragmentState(obj);
+                    mActive[i] = fragmentState;
+                    if (obj.mState > 0 && fragmentState.mSavedFragmentState == null) {
+                        fragmentState.mSavedFragmentState = this.saveFragmentBasicState(obj);
+                        if (obj.mTarget != null) {
+                            if (obj.mTarget.mIndex < 0) {
+                                this.throwException(new IllegalStateException("Failure saving state: " + obj + " has target not in fragment manager: " + obj.mTarget));
+                            }
+                            if (fragmentState.mSavedFragmentState == null) {
+                                fragmentState.mSavedFragmentState = new Bundle();
+                            }
+                            this.putFragment(fragmentState.mSavedFragmentState, "android:target_state", obj.mTarget);
+                            if (obj.mTargetRequestCode != 0) {
+                                fragmentState.mSavedFragmentState.putInt("android:target_req_state", obj.mTargetRequestCode);
+                            }
+                        }
+                    }
+                    else {
+                        fragmentState.mSavedFragmentState = obj.mSavedFragmentState;
+                    }
+                    if (FragmentManagerImpl.DEBUG) {
+                        Log.v("FragmentManager", "Saved state of " + obj + ": " + fragmentState.mSavedFragmentState);
+                    }
+                    n2 = 1;
+                }
+                else {
+                    n2 = n;
+                }
+                ++i;
+                n = n2;
+            }
+            if (n != 0) {
+                int[] mAdded = null;
+                Label_0574: {
+                    if (this.mAdded != null) {
+                        final int size2 = this.mAdded.size();
+                        if (size2 > 0) {
+                            mAdded = new int[size2];
+                            for (int j = 0; j < size2; ++j) {
+                                mAdded[j] = this.mAdded.get(j).mIndex;
+                                if (mAdded[j] < 0) {
+                                    this.throwException(new IllegalStateException("Failure saving state: active " + this.mAdded.get(j) + " has cleared index: " + mAdded[j]));
+                                }
+                                if (FragmentManagerImpl.DEBUG) {
+                                    Log.v("FragmentManager", "saveAllState: adding fragment #" + j + ": " + this.mAdded.get(j));
+                                }
+                            }
+                            break Label_0574;
+                        }
+                    }
+                    mAdded = null;
+                }
+                final ArrayList<BackStackRecord> mBackStack = this.mBackStack;
+                BackStackState[] mBackStack2 = null;
+                if (mBackStack != null) {
+                    final int size3 = this.mBackStack.size();
+                    mBackStack2 = null;
+                    if (size3 > 0) {
+                        mBackStack2 = new BackStackState[size3];
+                        for (int k = 0; k < size3; ++k) {
+                            mBackStack2[k] = new BackStackState(this, this.mBackStack.get(k));
+                            if (FragmentManagerImpl.DEBUG) {
+                                Log.v("FragmentManager", "saveAllState: adding back stack #" + k + ": " + this.mBackStack.get(k));
+                            }
+                        }
+                    }
+                }
+                final FragmentManagerState fragmentManagerState = new FragmentManagerState();
+                fragmentManagerState.mActive = mActive;
+                fragmentManagerState.mAdded = mAdded;
+                fragmentManagerState.mBackStack = mBackStack2;
+                return (Parcelable)fragmentManagerState;
+            }
+            if (FragmentManagerImpl.DEBUG) {
+                Log.v("FragmentManager", "saveAllState: no fragments!");
+                return null;
+            }
+        }
+        return null;
+    }
+    
+    Bundle saveFragmentBasicState(final Fragment fragment) {
+        if (this.mStateBundle == null) {
+            this.mStateBundle = new Bundle();
+        }
+        fragment.performSaveInstanceState(this.mStateBundle);
+        Bundle mStateBundle;
+        if (!this.mStateBundle.isEmpty()) {
+            mStateBundle = this.mStateBundle;
+            this.mStateBundle = null;
+        }
+        else {
+            mStateBundle = null;
+        }
+        if (fragment.mView != null) {
+            this.saveFragmentViewState(fragment);
+        }
+        if (fragment.mSavedViewState != null) {
+            if (mStateBundle == null) {
+                mStateBundle = new Bundle();
+            }
+            mStateBundle.putSparseParcelableArray("android:view_state", (SparseArray)fragment.mSavedViewState);
+        }
+        if (!fragment.mUserVisibleHint) {
+            if (mStateBundle == null) {
+                mStateBundle = new Bundle();
+            }
+            mStateBundle.putBoolean("android:user_visible_hint", fragment.mUserVisibleHint);
+        }
+        return mStateBundle;
+    }
+    
+    @Override
+    public Fragment$SavedState saveFragmentInstanceState(final Fragment obj) {
+        if (obj.mIndex < 0) {
+            this.throwException(new IllegalStateException("Fragment " + obj + " is not currently in the FragmentManager"));
+        }
+        final int mState = obj.mState;
+        Fragment$SavedState fragment$SavedState = null;
+        if (mState > 0) {
+            final Bundle saveFragmentBasicState = this.saveFragmentBasicState(obj);
+            fragment$SavedState = null;
+            if (saveFragmentBasicState != null) {
+                fragment$SavedState = new Fragment$SavedState(saveFragmentBasicState);
+            }
+        }
+        return fragment$SavedState;
+    }
+    
+    void saveFragmentViewState(final Fragment fragment) {
+        if (fragment.mInnerView != null) {
+            if (this.mStateArray == null) {
+                this.mStateArray = (SparseArray<Parcelable>)new SparseArray();
+            }
+            else {
+                this.mStateArray.clear();
+            }
+            fragment.mInnerView.saveHierarchyState((SparseArray)this.mStateArray);
+            if (this.mStateArray.size() > 0) {
+                fragment.mSavedViewState = this.mStateArray;
+                this.mStateArray = null;
+            }
+        }
+    }
+    
+    public void setBackStackIndex(final int i, final BackStackRecord backStackRecord) {
+        synchronized (this) {
+            if (this.mBackStackIndices == null) {
+                this.mBackStackIndices = new ArrayList<BackStackRecord>();
+            }
+            int j = this.mBackStackIndices.size();
+            if (i < j) {
+                if (FragmentManagerImpl.DEBUG) {
+                    Log.v("FragmentManager", "Setting back stack index " + i + " to " + backStackRecord);
+                }
+                this.mBackStackIndices.set(i, backStackRecord);
+            }
+            else {
+                while (j < i) {
+                    this.mBackStackIndices.add(null);
+                    if (this.mAvailBackStackIndices == null) {
+                        this.mAvailBackStackIndices = new ArrayList<Integer>();
+                    }
+                    if (FragmentManagerImpl.DEBUG) {
+                        Log.v("FragmentManager", "Adding available back stack index " + j);
+                    }
+                    this.mAvailBackStackIndices.add(j);
+                    ++j;
+                }
+                if (FragmentManagerImpl.DEBUG) {
+                    Log.v("FragmentManager", "Adding back stack index " + i + " with " + backStackRecord);
+                }
+                this.mBackStackIndices.add(backStackRecord);
+            }
+        }
+    }
+    
+    public void showFragment(final Fragment obj, final int n, final int n2) {
+        if (FragmentManagerImpl.DEBUG) {
+            Log.v("FragmentManager", "show: " + obj);
+        }
+        if (obj.mHidden) {
+            obj.mHidden = false;
+            if (obj.mView != null) {
+                final Animation loadAnimation = this.loadAnimation(obj, n, true, n2);
+                if (loadAnimation != null) {
+                    obj.mView.startAnimation(loadAnimation);
+                }
+                obj.mView.setVisibility(0);
+            }
+            if (obj.mAdded && obj.mHasMenu && obj.mMenuVisible) {
+                this.mNeedMenuInvalidate = true;
+            }
+            obj.onHiddenChanged(false);
+        }
+    }
+    
+    void startPendingDeferredFragments() {
+        if (this.mActive != null) {
+            for (int i = 0; i < this.mActive.size(); ++i) {
+                final Fragment fragment = this.mActive.get(i);
+                if (fragment != null) {
+                    this.performPendingDeferredStart(fragment);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder(128);
+        sb.append("FragmentManager{");
+        sb.append(Integer.toHexString(System.identityHashCode(this)));
+        sb.append(" in ");
+        if (this.mParent != null) {
+            c.a(this.mParent, sb);
+        }
+        else {
+            c.a(this.mActivity, sb);
+        }
+        sb.append("}}");
+        return sb.toString();
+    }
+}
